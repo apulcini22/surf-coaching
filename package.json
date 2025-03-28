@@ -1,0 +1,21 @@
+{
+  "name": "surf-coaching-website",
+  "version": "1.0.0",
+  "description": "A website for surf coaching services",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [
+    "surf",
+    "coaching",
+    "website",
+    "static"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
