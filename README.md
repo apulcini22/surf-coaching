@@ -35,6 +35,7 @@ This is a static website that can be hosted on any web hosting service such as:
 ## Structure
 
 - `index.html` - Main HTML file
+- `about.html` - Detailed About page with company story and instructor profiles
 - `css/` - CSS stylesheets
 - `js/` - JavaScript files
 - `img/` - Images for the website
@@ -42,9 +43,10 @@ This is a static website that can be hosted on any web hosting service such as:
 ## Customization
 
 1. Update the hero image: Replace `img/surf-hero.jpg` with your own surf coaching image
-2. Change text content in `index.html` to match your business
-3. Update contact information in the footer
-4. Modify colors in `css/styles.css` to match your branding
+2. Update instructor and group images: Replace `img/instructor.jpg` and `img/surf-group.jpg`
+3. Change text content in `index.html` and `about.html` to match your business
+4. Update contact information in the footer
+5. Modify colors in `css/styles.css` to match your branding
 
 ## Development
 
