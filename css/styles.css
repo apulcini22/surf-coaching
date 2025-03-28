@@ -64,12 +64,18 @@ section {
 .hero {
     height: 100vh;
     background-color: #2980b9; /* Fallback color if image is not available */
-    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('../img/surf-hero.jpg');
+    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('../img/surf-hero.jpg');
     background-size: cover;
     background-position: center;
     color: white;
     display: flex;
     flex-direction: column;
+}
+
+.inner-page-hero {
+    height: 50vh;
+    min-height: 300px;
+    background-position: center 30%;
 }
 
 .navbar {
@@ -126,8 +132,15 @@ section {
 .hero-content h1 {
     font-size: 3.5rem;
     font-weight: 700;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.hero-tagline {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    max-width: 600px;
 }
 
 .button-group {

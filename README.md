@@ -1,4 +1,4 @@
-# Surf Coaching Website
+# Surf Right Coaching Website
 
 A responsive website for a surf coaching business, featuring a modern design with booking capabilities.
 
@@ -9,28 +9,41 @@ A responsive website for a surf coaching business, featuring a modern design wit
 - Information about services and pricing
 - Clean, modern UI that highlights surf coaching
 
-## Hosting Instructions
+## Hosting on GitHub Pages
 
-This is a static website that can be hosted on any web hosting service such as:
+This website is configured to be hosted on GitHub Pages under the domain "http://www.surfrightcoaching.com/". To set it up:
 
-1. **GitHub Pages**: Free hosting for static websites
+1. **Create a GitHub repository**:
 
-   - Push this repository to GitHub
-   - Enable GitHub Pages in the repository settings
+   - Create a new repository on GitHub
+   - Push all the files in this project to your repository
 
-2. **Netlify**: Free hosting with advanced features
+2. **Set up GitHub Pages**:
 
-   - Connect to your GitHub repository
-   - Or drag and drop the folder to Netlify's dashboard
+   - Go to your repository on GitHub
+   - Navigate to Settings > Pages
+   - Under "Source", select the branch containing your site (usually `main`)
+   - Click "Save"
 
-3. **Vercel**: Modern hosting platform
+3. **Configure your custom domain**:
 
-   - Connect to your GitHub repository
-   - Or use the Vercel CLI to deploy
+   - In the GitHub Pages settings, enter `www.surfrightcoaching.com` in the Custom domain field
+   - Check "Enforce HTTPS" (after DNS propagation is complete)
 
-4. **Any traditional web hosting**:
-   - Upload all files to your hosting provider using FTP
-   - Ensure the file structure remains intact
+4. **DNS Configuration**:
+   - Log into your domain registrar's DNS settings
+   - Add these records:
+     - A record for `@` pointing to these GitHub Pages IP addresses:
+       - 185.199.108.153
+       - 185.199.109.153
+       - 185.199.110.153
+       - 185.199.111.153
+     - CNAME record for `www` pointing to `<username>.github.io` (replace with your GitHub username)
+   - Wait for DNS propagation (might take up to 24 hours)
+
+## GitHub Actions
+
+This repository includes a GitHub Actions workflow in `.github/workflows/deploy.yml` that automatically deploys your site to GitHub Pages whenever you push changes to the main branch.
 
 ## Structure
 
@@ -39,6 +52,7 @@ This is a static website that can be hosted on any web hosting service such as:
 - `css/` - CSS stylesheets
 - `js/` - JavaScript files
 - `img/` - Images for the website
+- `CNAME` - Custom domain configuration for GitHub Pages
 
 ## Customization
 
@@ -52,9 +66,10 @@ This is a static website that can be hosted on any web hosting service such as:
 
 To make changes:
 
-1. Edit the HTML, CSS, or JS files
-2. Test locally by opening `index.html` in a web browser
-3. Deploy to your hosting provider when ready
+1. Clone the repository
+2. Edit the HTML, CSS, or JS files
+3. Test locally by opening `index.html` in a web browser
+4. Commit and push changes to GitHub - your site will automatically deploy
 
 ## License
 
