@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Shop the Surf Right Classic Longboard - timeless design for smooth, stylish rides."
+    />
+    <meta
+      name="keywords"
+      content="surfboard, longboard, classic longboard, surf right, buy surfboard"
+    />
+    <title>Classic Longboard - Surf Right Coaching</title>
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .inner-page-hero {
+        height: 50vh;
+        min-height: 300px;
+      }
+
+      .product-section {
+        padding: 60px 0;
+      }
+
+      .product-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 50px;
+        align-items: start;
+      }
+
+      .product-image {
+        width: 100%;
+        aspect-ratio: 1;
+        background-color: #fef5e7;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        color: #666;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      .product-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .product-details h2 {
+        font-size: 2rem;
+        margin-bottom: 10px;
+      }
+
+      .product-vendor {
+        color: #e67e22;
+        font-weight: 600;
+        font-size: 0.95rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 15px;
+      }
+
+      .product-price {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 5px;
+      }
+
+      .product-price .compare-price {
+        font-size: 1.2rem;
+        color: #999;
+        text-decoration: line-through;
+        margin-left: 10px;
+        font-weight: 400;
+      }
+
+      .product-sku {
+        font-size: 0.85rem;
+        color: #999;
+        margin-bottom: 25px;
+      }
+
+      .product-description {
+        line-height: 1.8;
+        margin-bottom: 30px;
+        color: #555;
+      }
+
+      .variant-selector {
+        margin-bottom: 30px;
+      }
+
+      .variant-selector label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+
+      .variant-options {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .variant-option {
+        padding: 10px 20px;
+        border: 2px solid #ddd;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s;
+        background: white;
+        font-family: inherit;
+        font-size: 0.95rem;
+      }
+
+      .variant-option:hover {
+        border-color: #e67e22;
+      }
+
+      .variant-option.active {
+        border-color: #e67e22;
+        background-color: #e67e22;
+        color: white;
+      }
+
+      .variant-option.out-of-stock {
+        opacity: 0.4;
+        cursor: not-allowed;
+        text-decoration: line-through;
+      }
+
+      .quantity-selector {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 30px;
+      }
+
+      .quantity-selector label {
+        font-weight: 600;
+      }
+
+      .quantity-selector input {
+        width: 70px;
+        padding: 10px;
+        border: 2px solid #ddd;
+        border-radius: 5px;
+        text-align: center;
+        font-family: inherit;
+        font-size: 1rem;
+      }
+
+      .add-to-cart-btn {
+        display: inline-block;
+        background-color: #3498db;
+        color: white;
+        padding: 15px 40px;
+        border: none;
+        border-radius: 5px;
+        text-transform: uppercase;
+        font-weight: 700;
+        font-size: 1.1rem;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        font-family: inherit;
+      }
+
+      .add-to-cart-btn:hover {
+        background-color: #2980b9;
+      }
+
+      .product-meta {
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+      }
+
+      .product-meta p {
+        font-size: 0.9rem;
+        color: #777;
+        margin-bottom: 5px;
+      }
+
+      .product-meta span {
+        font-weight: 600;
+        color: #333;
+      }
+
+      .data-layer-badge {
+        display: inline-block;
+        background-color: #e37400;
+        color: white;
+        padding: 4px 12px;
+        border-radius: 3px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        margin-bottom: 20px;
+      }
+
+      @media (max-width: 768px) {
+        .product-grid {
+          grid-template-columns: 1fr;
+          gap: 30px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="hero inner-page-hero">
+      <nav class="navbar">
+        <div class="container">
+          <a href="index.html" class="logo">Surf Right</a>
+          <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="shopify.html">Shopify</a></li>
+            <li><a href="ga.html">GA</a></li>
+            <li><a href="index.html#services">Services</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+          </ul>
+        </div>
+      </nav>
+
+      <div class="hero-content">
+        <h1>Shop Surf Gear</h1>
+        <p class="hero-tagline">Timeless boards for smooth, stylish rides</p>
+      </div>
+    </header>
+
+    <section class="product-section">
+      <div class="container">
+        <div class="product-grid">
+          <div class="product-image">
+            <img src="./img/ga-surf.jpg" alt="Surf Right Classic Longboard">
+          </div>
+
+          <div class="product-details">
+            <span class="data-layer-badge">GA4 / GTM Data Layer</span>
+            <p class="product-vendor">Surf Right Boards</p>
+            <h2>Classic Longboard</h2>
+            <p class="product-price">
+              $425.00
+              <span class="compare-price">$475.00</span>
+            </p>
+            <p class="product-sku">SKU: SRB-CLSC-002</p>
+
+            <p class="product-description">
+              The Surf Right Classic Longboard is crafted for surfers who
+              appreciate smooth glides, graceful nose rides, and effortless
+              style. With a single-fin setup and wide-nosed template, this board
+              excels in small to medium surf and is the perfect companion for
+              relaxed sessions and cross-stepping down the line.
+            </p>
+
+            <div class="variant-selector">
+              <label>Size</label>
+              <div class="variant-options">
+                <button class="variant-option" data-item-variant="Natural Wood / 8'0&quot;">8'0"</button>
+                <button class="variant-option active" data-item-variant="Natural Wood / 9'0&quot;">9'0"</button>
+                <button class="variant-option" data-item-variant="Natural Wood / 9'6&quot;">9'6"</button>
+                <button class="variant-option out-of-stock" data-item-variant="Natural Wood / 10'0&quot;">10'0"</button>
+              </div>
+            </div>
+
+            <div class="variant-selector">
+              <label>Finish</label>
+              <div class="variant-options">
+                <button class="variant-option active">Natural Wood</button>
+                <button class="variant-option">Sun-Bleached White</button>
+                <button class="variant-option">Vintage Cream</button>
+              </div>
+            </div>
+
+            <div class="quantity-selector">
+              <label for="quantity">Quantity</label>
+              <input type="number" id="quantity" value="1" min="1" max="10" />
+            </div>
+
+            <button class="add-to-cart-btn" onclick="handleAddToCart()">Add to Cart</button>
+
+            <div class="product-meta">
+              <p>Type: <span>Longboard</span></p>
+              <p>Vendor: <span>Surf Right Boards</span></p>
+              <p>Collections: <span>Surfboards, Classic, Best Sellers</span></p>
+              <p>Tags: <span>longboard, classic, single-fin, noserider</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-logo">
+            <h3>Surf Right</h3>
+            <p>Professional surf instruction for all levels</p>
+          </div>
+          <div class="footer-links">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><a href="index.html">Home</a></li>
+              <li><a href="about.html">About</a></li>
+              <li><a href="shopify.html">Shopify</a></li>
+              <li><a href="ga.html">GA</a></li>
+              <li><a href="index.html#services">Services</a></li>
+              <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+          </div>
+          <div class="footer-contact">
+            <h4>Contact Info</h4>
+            <p>Email: info@surfrightcoaching.com</p>
+            <p>Phone: (555) 123-4567</p>
+            <p>Location: Beach Ave, Surf City</p>
+          </div>
+        </div>
+        <div class="copyright">
+          <p>&copy; 2025 Surf Right Coaching. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- GTM / GA4 Data Layer -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+
+      /* view_item - fires on page load */
+      window.dataLayer.push({
+        event: "view_item",
+        ecommerce: {
+          currency: "USD",
+          value: 425.00,
+          items: [
+            {
+              item_id: "SRB-CLSC-002",
+              item_name: "Classic Longboard",
+              affiliation: "Surf Right Online Store",
+              coupon: "",
+              discount: 50.00,
+              index: 0,
+              item_brand: "Surf Right Boards",
+              item_category: "Surfboards",
+              item_category2: "Longboard",
+              item_category3: "Classic",
+              item_list_id: "product_page",
+              item_list_name: "Product Page",
+              item_variant: "Natural Wood / 9'0\"",
+              price: 425.00,
+              quantity: 1
+            }
+          ]
+        }
+      });
+
+      function handleAddToCart() {
+        var qty = parseInt(document.getElementById('quantity').value, 10);
+        var itemValue = 425.00 * qty;
+
+        window.dataLayer.push({ ecommerce: null });
+
+        window.dataLayer.push({
+          event: "add_to_cart",
+          ecommerce: {
+            currency: "USD",
+            value: itemValue,
+            items: [
+              {
+                item_id: "SRB-CLSC-002",
+                item_name: "Classic Longboard",
+                affiliation: "Surf Right Online Store",
+                coupon: "",
+                discount: 50.00,
+                index: 0,
+                item_brand: "Surf Right Boards",
+                item_category: "Surfboards",
+                item_category2: "Longboard",
+                item_category3: "Classic",
+                item_list_id: "product_page",
+                item_list_name: "Product Page",
+                item_variant: "Natural Wood / 9'0\"",
+                price: 425.00,
+                quantity: qty
+              }
+            ]
+          }
+        });
+
+        alert('Added ' + qty + ' x Classic Longboard to cart!');
+      }
+    </script>
+
+    <script src="js/main.js"></script>
+
+    <!-- MNTN Tracking Pixel -->
+    <!-- <script src="https://cdn-staging.ex.mountain.com/mtag.js?cb=356"></script>
+    <script>
+      mtag("config", "36214", {
+        apiUrl: "https://pxs-staging.ex.mountain.com",
+        debug: true,
+        autoDetectDataLayers: true
+      });
+    </script> -->
+  </body>
+</html>

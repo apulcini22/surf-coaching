@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Shop the Surf Right Performance Shortboard - crafted for speed and precision on the wave."
+    />
+    <meta
+      name="keywords"
+      content="surfboard, performance shortboard, surf right, buy surfboard"
+    />
+    <title>Performance Shortboard - Surf Right Coaching</title>
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .inner-page-hero {
+        height: 50vh;
+        min-height: 300px;
+      }
+
+      .product-section {
+        padding: 60px 0;
+      }
+
+      .product-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 50px;
+        align-items: start;
+      }
+
+      .product-image {
+        width: 100%;
+        aspect-ratio: 1;
+        background-color: #e8f4f8;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        color: #666;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      .product-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .product-details h2 {
+        font-size: 2rem;
+        margin-bottom: 10px;
+      }
+
+      .product-vendor {
+        color: #3498db;
+        font-weight: 600;
+        font-size: 0.95rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 15px;
+      }
+
+      .product-price {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 5px;
+      }
+
+      .product-price .compare-price {
+        font-size: 1.2rem;
+        color: #999;
+        text-decoration: line-through;
+        margin-left: 10px;
+        font-weight: 400;
+      }
+
+      .product-sku {
+        font-size: 0.85rem;
+        color: #999;
+        margin-bottom: 25px;
+      }
+
+      .product-description {
+        line-height: 1.8;
+        margin-bottom: 30px;
+        color: #555;
+      }
+
+      .variant-selector {
+        margin-bottom: 30px;
+      }
+
+      .variant-selector label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+
+      .variant-options {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .variant-option {
+        padding: 10px 20px;
+        border: 2px solid #ddd;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s;
+        background: white;
+        font-family: inherit;
+        font-size: 0.95rem;
+      }
+
+      .variant-option:hover {
+        border-color: #3498db;
+      }
+
+      .variant-option.active {
+        border-color: #3498db;
+        background-color: #3498db;
+        color: white;
+      }
+
+      .variant-option.out-of-stock {
+        opacity: 0.4;
+        cursor: not-allowed;
+        text-decoration: line-through;
+      }
+
+      .quantity-selector {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 30px;
+      }
+
+      .quantity-selector label {
+        font-weight: 600;
+      }
+
+      .quantity-selector input {
+        width: 70px;
+        padding: 10px;
+        border: 2px solid #ddd;
+        border-radius: 5px;
+        text-align: center;
+        font-family: inherit;
+        font-size: 1rem;
+      }
+
+      .add-to-cart-btn {
+        display: inline-block;
+        background-color: #e67e22;
+        color: white;
+        padding: 15px 40px;
+        border: none;
+        border-radius: 5px;
+        text-transform: uppercase;
+        font-weight: 700;
+        font-size: 1.1rem;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        font-family: inherit;
+      }
+
+      .add-to-cart-btn:hover {
+        background-color: #d35400;
+      }
+
+      .product-meta {
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+      }
+
+      .product-meta p {
+        font-size: 0.9rem;
+        color: #777;
+        margin-bottom: 5px;
+      }
+
+      .product-meta span {
+        font-weight: 600;
+        color: #333;
+      }
+
+      .data-layer-badge {
+        display: inline-block;
+        background-color: #95bf47;
+        color: white;
+        padding: 4px 12px;
+        border-radius: 3px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        margin-bottom: 20px;
+      }
+
+      @media (max-width: 768px) {
+        .product-grid {
+          grid-template-columns: 1fr;
+          gap: 30px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="hero inner-page-hero">
+      <nav class="navbar">
+        <div class="container">
+          <a href="index.html" class="logo">Surf Right</a>
+          <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="shopify.html">Shopify</a></li>
+            <li><a href="ga.html">GA</a></li>
+            <li><a href="index.html#services">Services</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+          </ul>
+        </div>
+      </nav>
+
+      <div class="hero-content">
+        <h1>Shop Surf Gear</h1>
+        <p class="hero-tagline">Premium boards built for every wave</p>
+      </div>
+    </header>
+
+    <section class="product-section">
+      <div class="container">
+        <div class="product-grid">
+          <div class="product-image">
+            <img src="./img/shopify-surf.jpg" alt="Surf Right Performance Shortboard">
+          </div>
+
+          <div class="product-details">
+            <span class="data-layer-badge">Shopify Data Layer</span>
+            <p class="product-vendor">Surf Right Boards</p>
+            <h2>Performance Shortboard</h2>
+            <p class="product-price">
+              $349.00
+              <span class="compare-price">$399.00</span>
+            </p>
+            <p class="product-sku">SKU: SRB-PERF-001</p>
+
+            <p class="product-description">
+              The Surf Right Performance Shortboard is designed for intermediate
+              to advanced surfers who demand speed, responsiveness, and precision.
+              Featuring a refined rocker profile and concave bottom contour, this
+              board delivers explosive acceleration and tight turning radius in
+              both small and overhead conditions.
+            </p>
+
+            <div class="variant-selector">
+              <label>Size</label>
+              <div class="variant-options">
+                <button class="variant-option active" data-variant-id="44100100000001" data-price="34900" data-sku="SRB-PERF-001-56">5'6"</button>
+                <button class="variant-option" data-variant-id="44100100000002" data-price="34900" data-sku="SRB-PERF-001-60">6'0"</button>
+                <button class="variant-option" data-variant-id="44100100000003" data-price="37900" data-sku="SRB-PERF-001-64">6'4"</button>
+                <button class="variant-option out-of-stock" data-variant-id="44100100000004" data-price="37900" data-sku="SRB-PERF-001-68">6'8"</button>
+              </div>
+            </div>
+
+            <div class="variant-selector">
+              <label>Color</label>
+              <div class="variant-options">
+                <button class="variant-option active">Midnight Black</button>
+                <button class="variant-option">Ocean Blue</button>
+                <button class="variant-option">Coral Reef</button>
+              </div>
+            </div>
+
+            <div class="quantity-selector">
+              <label for="quantity">Quantity</label>
+              <input type="number" id="quantity" value="1" min="1" max="10" />
+            </div>
+
+            <button class="add-to-cart-btn" onclick="handleAddToCart()">Add to Cart</button>
+
+            <div class="product-meta">
+              <p>Type: <span>Shortboard</span></p>
+              <p>Vendor: <span>Surf Right Boards</span></p>
+              <p>Collections: <span>Surfboards, Performance, New Arrivals</span></p>
+              <p>Tags: <span>shortboard, performance, carbon-fiber, pro-series</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-logo">
+            <h3>Surf Right</h3>
+            <p>Professional surf instruction for all levels</p>
+          </div>
+          <div class="footer-links">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><a href="index.html">Home</a></li>
+              <li><a href="about.html">About</a></li>
+              <li><a href="shopify.html">Shopify</a></li>
+              <li><a href="ga.html">GA</a></li>
+              <li><a href="index.html#services">Services</a></li>
+              <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+          </div>
+          <div class="footer-contact">
+            <h4>Contact Info</h4>
+            <p>Email: info@surfrightcoaching.com</p>
+            <p>Phone: (555) 123-4567</p>
+            <p>Location: Beach Ave, Surf City</p>
+          </div>
+        </div>
+        <div class="copyright">
+          <p>&copy; 2025 Surf Right Coaching. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Shopify Analytics Data Layer -->
+    <script>
+      window.ShopifyAnalytics = window.ShopifyAnalytics || {};
+
+      window.ShopifyAnalytics.meta = {
+        page: {
+          pageType: "product",
+          resourceType: "product",
+          resourceId: 8901234567890
+        },
+        product: {
+          id: 8901234567890,
+          title: "Performance Shortboard",
+          vendor: "Surf Right Boards",
+          type: "Shortboard",
+          variants: [
+            {
+              id: 44100100000001,
+              title: "Midnight Black / 5'6\"",
+              price: "34900",
+              sku: "SRB-PERF-001-56",
+              available: true
+            },
+            {
+              id: 44100100000002,
+              title: "Midnight Black / 6'0\"",
+              price: "34900",
+              sku: "SRB-PERF-001-60",
+              available: true
+            },
+            {
+              id: 44100100000003,
+              title: "Midnight Black / 6'4\"",
+              price: "37900",
+              sku: "SRB-PERF-001-64",
+              available: true
+            },
+            {
+              id: 44100100000004,
+              title: "Midnight Black / 6'8\"",
+              price: "37900",
+              sku: "SRB-PERF-001-68",
+              available: false
+            }
+          ]
+        }
+      };
+
+      function handleAddToCart() {
+        var qty = document.getElementById('quantity').value;
+        alert('Added ' + qty + ' x Performance Shortboard to cart!');
+      }
+    </script>
+
+    <script src="js/main.js"></script>
+
+    <!-- MNTN Tracking Pixel -->
+    <!-- <script src="https://cdn-staging.ex.mountain.com/mtag.js?cb=356"></script>
+    <script>
+      mtag("config", "36214", {
+        apiUrl: "https://pxs-staging.ex.mountain.com",
+        debug: true,
+        autoDetectDataLayers: true
+      });
+    </script> -->
+  </body>
+</html>
