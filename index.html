@@ -309,7 +309,7 @@
 
 
   /* DIRECT API CALLS TO SEND OVER EVENTS - USE IF NO PRODUCT DATA IS FOUNG FOR EXAMPLE */
-    <script>
+    <!-- <script>
       // Page view
       mtag('event', 'page_view', {
         page_title: 'Home Page',
@@ -341,7 +341,7 @@
           }
         ]
       });
-    </script>
+    </script> -->
 
 
 /* Push events onto the data layer after 5 seconds*/
@@ -350,14 +350,14 @@
     console.log('Pushing events onto the data layer after 5 seconds');
     window.dataLayer.push({
       event: 'purchase',
-      transaction_id: 'T-12345',
+      transaction_id: 'T-minus-5-seconds-12345',
       currency: 'USD',
       value: 99.99,
     });
     window.dataLayer.push({
       event: 'view_item',
-      item_id: 'SKU-001',
-      item_name: 'Product Name',
+      item_id: 'SKU-minus-5-seconds-001',
+      item_name: 'Product Name after 5 seconds',
       price: 99.99,
       quantity: 1
     });
