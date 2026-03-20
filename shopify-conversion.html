@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Shopify conversion testing page - mock Shopify checkout, order, and analytics data for development and QA."
+    />
+    <meta
+      name="keywords"
+      content="Shopify, conversion, checkout, order, testing, ShopifyAnalytics, web pixels"
+    />
+    <title>Shopify Conversion Testing - Surf Right Coaching</title>
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .inner-page-hero {
+        height: 50vh;
+        min-height: 300px;
+      }
+
+      .conversion-section {
+        padding: 60px 0;
+      }
+
+      .conversion-section h2 {
+        text-align: center;
+        margin-bottom: 15px;
+      }
+
+      .section-subtitle {
+        text-align: center;
+        color: #777;
+        margin-bottom: 50px;
+        font-size: 1rem;
+      }
+
+      .event-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+        gap: 30px;
+      }
+
+      .event-card {
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 30px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      .event-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      }
+
+      .event-card h3 {
+        font-size: 1.2rem;
+        margin-bottom: 6px;
+      }
+
+      .event-badge {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 3px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        margin-bottom: 15px;
+      }
+
+      .badge-checkout {
+        background-color: #95bf47;
+        color: #fff;
+      }
+
+      .badge-order {
+        background-color: #e74c3c;
+        color: #fff;
+      }
+
+      .badge-cart {
+        background-color: #3498db;
+        color: #fff;
+      }
+
+      .badge-customer {
+        background-color: #9b59b6;
+        color: #fff;
+      }
+
+      .event-card p {
+        color: #555;
+        font-size: 0.92rem;
+        line-height: 1.6;
+        margin-bottom: 20px;
+      }
+
+      .event-card pre {
+        background: #f4f4f4;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 15px;
+        font-size: 0.78rem;
+        line-height: 1.5;
+        overflow-x: auto;
+        margin-bottom: 20px;
+        max-height: 280px;
+        overflow-y: auto;
+      }
+
+      .fire-btn {
+        display: inline-block;
+        background-color: #95bf47;
+        color: white;
+        padding: 10px 24px;
+        border: none;
+        border-radius: 5px;
+        text-transform: uppercase;
+        font-weight: 700;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        font-family: inherit;
+      }
+
+      .fire-btn:hover {
+        background-color: #7ea63d;
+      }
+
+      .fire-btn.fired {
+        background-color: #95a5a6;
+        cursor: default;
+      }
+
+      .status-msg {
+        display: inline-block;
+        margin-left: 12px;
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: #95bf47;
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+
+      .status-msg.visible {
+        opacity: 1;
+      }
+
+      .auto-fire-section {
+        background: #f9f9f9;
+        padding: 60px 0;
+      }
+
+      .auto-fire-section h2 {
+        text-align: center;
+        margin-bottom: 15px;
+      }
+
+      .auto-fire-info {
+        max-width: 800px;
+        margin: 0 auto 30px;
+        text-align: center;
+        color: #555;
+        line-height: 1.7;
+      }
+
+      .auto-events-list {
+        max-width: 800px;
+        margin: 0 auto;
+        display: grid;
+        gap: 15px;
+      }
+
+      .auto-event-row {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        background: #fff;
+        padding: 15px 20px;
+        border-radius: 6px;
+        border: 1px solid #e0e0e0;
+        font-size: 0.9rem;
+      }
+
+      .auto-event-row .event-name {
+        font-weight: 700;
+        color: #2c3e50;
+        min-width: 200px;
+      }
+
+      .auto-event-row .event-timing {
+        color: #95bf47;
+        font-weight: 600;
+        min-width: 100px;
+      }
+
+      .auto-event-row .event-status {
+        margin-left: auto;
+        font-weight: 600;
+        color: #95a5a6;
+      }
+
+      .auto-event-row .event-status.done {
+        color: #95bf47;
+      }
+
+      @media (max-width: 768px) {
+        .event-grid {
+          grid-template-columns: 1fr;
+          gap: 20px;
+        }
+        .auto-event-row {
+          flex-wrap: wrap;
+        }
+      }
+    </style>
+
+    <!-- Google Tag Manager / Google Analytics -->
+    <script>
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-NW293KQ');
+    </script>
+  </head>
+  <body>
+    <header class="hero inner-page-hero">
+      <nav class="navbar">
+        <div class="container">
+          <a href="index.html" class="logo">Surf Right</a>
+          <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="shopify.html">Shopify</a></li>
+            <li><a href="ga.html">GA</a></li>
+            <li><a href="ga4-conversion.html">GA4 Conversion</a></li>
+            <li><a href="shopify-conversion.html">Shopify Conversion</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+          </ul>
+        </div>
+      </nav>
+
+      <div class="hero-content">
+        <h1>Shopify Conversion Testing</h1>
+        <p class="hero-tagline">
+          Mock Shopify checkout, order &amp; analytics conversion data for development &amp; QA
+        </p>
+      </div>
+    </header>
+
+    <!-- Auto-populated Shopify globals -->
+    <section class="auto-fire-section">
+      <div class="container">
+        <h2>Auto-Populated Shopify Data (Page Load)</h2>
+        <p class="auto-fire-info">
+          These Shopify global objects are set on <code>window</code> automatically when the page
+          loads, simulating a completed Shopify checkout / thank-you page.
+        </p>
+        <div class="auto-events-list">
+          <div class="auto-event-row">
+            <span class="event-name">window.Shopify</span>
+            <span class="event-timing">Immediate</span>
+            <span class="event-desc">Shop config, locale, currency</span>
+            <span class="event-status done" id="status-shopify">&#10003; Set</span>
+          </div>
+          <div class="auto-event-row">
+            <span class="event-name">ShopifyAnalytics.meta</span>
+            <span class="event-timing">Immediate</span>
+            <span class="event-desc">Page type &amp; product metadata</span>
+            <span class="event-status done" id="status-sa-meta">&#10003; Set</span>
+          </div>
+          <div class="auto-event-row">
+            <span class="event-name">Shopify.checkout</span>
+            <span class="event-timing">Immediate</span>
+            <span class="event-desc">Completed order / checkout object</span>
+            <span class="event-status done" id="status-checkout">&#10003; Set</span>
+          </div>
+          <div class="auto-event-row">
+            <span class="event-name">Shopify.Checkout.step</span>
+            <span class="event-timing">Immediate</span>
+            <span class="event-desc">thank_you step identifier</span>
+            <span class="event-status done" id="status-step">&#10003; Set</span>
+          </div>
+          <div class="auto-event-row">
+            <span class="event-name">dataLayer purchase</span>
+            <span class="event-timing">+3 seconds</span>
+            <span class="event-desc">GA4-style purchase derived from Shopify order</span>
+            <span class="event-status" id="status-dl-purchase">Pending</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Shopify conversion events -->
+    <section class="conversion-section">
+      <div class="container">
+        <h2>Interactive Shopify Conversion Events</h2>
+        <p class="section-subtitle">
+          Click each button to populate or update the corresponding Shopify data on <code>window</code>.
+          Open your browser console to inspect.
+        </p>
+
+        <div class="event-grid">
+
+          <!-- Shopify.checkout (Order Complete) -->
+          <div class="event-card">
+            <span class="event-badge badge-order">Order</span>
+            <h3>Shopify.checkout</h3>
+            <p>Full completed checkout object with order, line items, shipping, billing, and discounts.</p>
+            <pre>{
+  order_id: 6012345678901,
+  order_name: "#SR-1042",
+  token: "abc123def456ghi789",
+  created_at: "2026-03-19T14:32:00-04:00",
+  currency: "USD",
+  total_price: "424.97",
+  subtotal_price: "399.97",
+  total_tax: "32.00",
+  total_shipping: "0.00",
+  total_discounts: "7.00",
+  discount_codes: [{
+    code: "SURFSEASON",
+    amount: "7.00",
+    type: "percentage"
+  }],
+  line_items: [{
+    product_id: 8901234567890,
+    variant_id: 44100100000001,
+    title: "Performance Shortboard",
+    variant_title: "Midnight Black / 5'6\"",
+    sku: "SRB-PERF-001-56",
+    vendor: "Surf Right Boards",
+    quantity: 1,
+    price: "349.00",
+    line_price: "349.00",
+    requires_shipping: true
+  }, {
+    product_id: 8901234567891,
+    variant_id: 44100100000010,
+    title: "Surf Wax - Tropical",
+    variant_title: "Warm Water",
+    sku: "SRW-WAX-TROP-01",
+    vendor: "Surf Right",
+    quantity: 3,
+    price: "6.99",
+    line_price: "20.97",
+    requires_shipping: true
+  }, {
+    product_id: 8901234567892,
+    variant_id: 44100100000020,
+    title: "Board Leash - 6ft Comp",
+    variant_title: "Black",
+    sku: "SRB-LEASH-6C-BK",
+    vendor: "Surf Right",
+    quantity: 1,
+    price: "30.00",
+    line_price: "30.00",
+    requires_shipping: true
+  }]
+}</pre>
+            <button class="fire-btn" onclick="fireCheckout(this)">Set Data</button>
+            <span class="status-msg" id="msg-checkout">Set on window.Shopify.checkout</span>
+          </div>
+
+          <!-- ShopifyAnalytics.meta -->
+          <div class="event-card">
+            <span class="event-badge badge-checkout">Analytics</span>
+            <h3>ShopifyAnalytics.meta</h3>
+            <p>Page metadata identifying this as a checkout/thank-you page with product context.</p>
+            <pre>{
+  page: {
+    pageType: "thank_you",
+    resourceType: "checkout",
+    resourceId: 35012345678901
+  },
+  product: {
+    id: 8901234567890,
+    title: "Performance Shortboard",
+    vendor: "Surf Right Boards",
+    type: "Shortboard",
+    variants: [{
+      id: 44100100000001,
+      title: "Midnight Black / 5'6\"",
+      price: "34900",
+      sku: "SRB-PERF-001-56",
+      available: true
+    }, {
+      id: 44100100000002,
+      title: "Midnight Black / 6'0\"",
+      price: "34900",
+      sku: "SRB-PERF-001-60",
+      available: true
+    }]
+  }
+}</pre>
+            <button class="fire-btn" onclick="fireAnalyticsMeta(this)">Set Data</button>
+            <span class="status-msg" id="msg-meta">Set on window.ShopifyAnalytics.meta</span>
+          </div>
+
+          <!-- Cart object -->
+          <div class="event-card">
+            <span class="event-badge badge-cart">Cart</span>
+            <h3>Shopify Cart (fetch /cart.js)</h3>
+            <p>Simulated cart JSON response with token, items, and totals — mirrors <code>/cart.js</code>.</p>
+            <pre>{
+  token: "c1d2e3f4a5b6c7d8e9f0",
+  note: "Gift wrap please",
+  item_count: 5,
+  total_price: 39997,
+  total_weight: 4500,
+  currency: "USD",
+  items: [{
+    id: 44100100000001,
+    product_id: 8901234567890,
+    title: "Performance Shortboard",
+    variant_title: "Midnight Black / 5'6\"",
+    sku: "SRB-PERF-001-56",
+    vendor: "Surf Right Boards",
+    quantity: 1,
+    price: 34900,
+    line_price: 34900,
+    handle: "performance-shortboard",
+    product_type: "Shortboard"
+  }, {
+    id: 44100100000010,
+    product_id: 8901234567891,
+    title: "Surf Wax - Tropical",
+    variant_title: "Warm Water",
+    sku: "SRW-WAX-TROP-01",
+    vendor: "Surf Right",
+    quantity: 3,
+    price: 699,
+    line_price: 2097,
+    handle: "surf-wax-tropical",
+    product_type: "Accessories"
+  }, {
+    id: 44100100000020,
+    product_id: 8901234567892,
+    title: "Board Leash - 6ft Comp",
+    variant_title: "Black",
+    sku: "SRB-LEASH-6C-BK",
+    vendor: "Surf Right",
+    quantity: 1,
+    price: 3000,
+    line_price: 3000,
+    handle: "board-leash-6ft-comp",
+    product_type: "Accessories"
+  }]
+}</pre>
+            <button class="fire-btn" onclick="fireCart(this)">Set Data</button>
+            <span class="status-msg" id="msg-cart">Set on window.__shopifyCart</span>
+          </div>
+
+          <!-- Customer object -->
+          <div class="event-card">
+            <span class="event-badge badge-customer">Customer</span>
+            <h3>Shopify Customer</h3>
+            <p>Logged-in customer data available on the thank-you page.</p>
+            <pre>{
+  id: 7100000000123,
+  email: "surfer@example.com",
+  first_name: "Kai",
+  last_name: "Nalu",
+  name: "Kai Nalu",
+  orders_count: 3,
+  total_spent: "1274.94",
+  tags: ["vip", "repeat-buyer"],
+  accepts_marketing: true,
+  default_address: {
+    first_name: "Kai",
+    last_name: "Nalu",
+    address1: "456 Beach Ave",
+    city: "Surf City",
+    province: "California",
+    province_code: "CA",
+    zip: "90210",
+    country: "United States",
+    country_code: "US"
+  }
+}</pre>
+            <button class="fire-btn" onclick="fireCustomer(this)">Set Data</button>
+            <span class="status-msg" id="msg-customer">Set on window.__st.cid</span>
+          </div>
+
+          <!-- Shipping & Billing -->
+          <div class="event-card">
+            <span class="event-badge badge-checkout">Checkout</span>
+            <h3>Shipping &amp; Billing Address</h3>
+            <p>Address objects attached to the checkout, used by pixels and post-purchase scripts.</p>
+            <pre>{
+  shipping_address: {
+    first_name: "Kai",
+    last_name: "Nalu",
+    address1: "456 Beach Ave",
+    address2: "Unit 12",
+    city: "Surf City",
+    province: "California",
+    province_code: "CA",
+    zip: "90210",
+    country: "United States",
+    country_code: "US",
+    phone: "555-987-6543"
+  },
+  billing_address: {
+    first_name: "Kai",
+    last_name: "Nalu",
+    address1: "456 Beach Ave",
+    address2: "Unit 12",
+    city: "Surf City",
+    province: "California",
+    province_code: "CA",
+    zip: "90210",
+    country: "United States",
+    country_code: "US"
+  }
+}</pre>
+            <button class="fire-btn" onclick="fireAddresses(this)">Set Data</button>
+            <span class="status-msg" id="msg-addr">Set on Shopify.checkout</span>
+          </div>
+
+          <!-- Purchase dataLayer push -->
+          <div class="event-card">
+            <span class="event-badge badge-order">Conversion</span>
+            <h3>dataLayer purchase (from Shopify)</h3>
+            <p>GA4-formatted purchase event derived from Shopify checkout data — as Shopify's own
+              GTM integration or a custom pixel would fire.</p>
+            <pre>{
+  event: "purchase",
+  ecommerce: {
+    transaction_id: "6012345678901",
+    affiliation: "Surf Right Online Store",
+    value: 424.97,
+    tax: 32.00,
+    shipping: 0.00,
+    currency: "USD",
+    coupon: "SURFSEASON",
+    items: [{
+      item_id: "SRB-PERF-001-56",
+      item_name: "Performance Shortboard",
+      item_brand: "Surf Right Boards",
+      item_category: "Shortboard",
+      item_variant: "Midnight Black / 5'6\"",
+      price: 349.00,
+      quantity: 1
+    }, {
+      item_id: "SRW-WAX-TROP-01",
+      item_name: "Surf Wax - Tropical",
+      item_brand: "Surf Right",
+      item_category: "Accessories",
+      item_variant: "Warm Water",
+      price: 6.99,
+      quantity: 3
+    }, {
+      item_id: "SRB-LEASH-6C-BK",
+      item_name: "Board Leash - 6ft Comp",
+      item_brand: "Surf Right",
+      item_category: "Accessories",
+      item_variant: "Black",
+      price: 30.00,
+      quantity: 1
+    }]
+  }
+}</pre>
+            <button class="fire-btn" onclick="fireDLPurchase(this)">Fire Event</button>
+            <span class="status-msg" id="msg-dl-purchase">Pushed to dataLayer</span>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-logo">
+            <h3>Surf Right</h3>
+            <p>Professional surf instruction for all levels</p>
+          </div>
+          <div class="footer-links">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><a href="index.html">Home</a></li>
+              <li><a href="about.html">About</a></li>
+              <li><a href="shopify.html">Shopify</a></li>
+              <li><a href="ga.html">GA</a></li>
+              <li><a href="ga4-conversion.html">GA4 Conversion</a></li>
+              <li><a href="shopify-conversion.html">Shopify Conversion</a></li>
+              <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+          </div>
+          <div class="footer-contact">
+            <h4>Contact Info</h4>
+            <p>Email: info@surfrightcoaching.com</p>
+            <p>Phone: (555) 123-4567</p>
+            <p>Location: Beach Ave, Surf City</p>
+          </div>
+        </div>
+        <div class="copyright">
+          <p>&copy; 2025 Surf Right Coaching. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Shopify globals: auto-populated on page load -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+
+      /* window.Shopify — shop config */
+      window.Shopify = window.Shopify || {};
+      window.Shopify.shop = "surf-right-coaching.myshopify.com";
+      window.Shopify.locale = "en";
+      window.Shopify.currency = { active: "USD", rate: "1.0" };
+      window.Shopify.country = "US";
+      window.Shopify.theme = { name: "Dawn", id: 136000000001, theme_store_id: 887 };
+
+      /* Shopify.Checkout — step identifier */
+      window.Shopify.Checkout = window.Shopify.Checkout || {};
+      window.Shopify.Checkout.step = "thank_you";
+      window.Shopify.Checkout.page = "thank_you";
+      window.Shopify.Checkout.token = "abc123def456ghi789";
+
+      /* Shopify.checkout — completed order object */
+      window.Shopify.checkout = {
+        order_id: 6012345678901,
+        order_name: "#SR-1042",
+        token: "abc123def456ghi789",
+        checkout_token: "abc123def456ghi789",
+        created_at: "2026-03-19T14:32:00-04:00",
+        updated_at: "2026-03-19T14:33:12-04:00",
+        currency: "USD",
+        presentment_currency: "USD",
+        total_price: "424.97",
+        subtotal_price: "399.97",
+        total_tax: "32.00",
+        total_shipping: "0.00",
+        total_discounts: "7.00",
+        financial_status: "paid",
+        fulfillment_status: null,
+        landing_site: "/collections/surfboards",
+        referring_site: "https://www.google.com/",
+        buyer_accepts_marketing: true,
+        discount_codes: [
+          {
+            code: "SURFSEASON",
+            amount: "7.00",
+            type: "percentage"
+          }
+        ],
+        shipping_address: {
+          first_name: "Kai",
+          last_name: "Nalu",
+          address1: "456 Beach Ave",
+          address2: "Unit 12",
+          city: "Surf City",
+          province: "California",
+          province_code: "CA",
+          zip: "90210",
+          country: "United States",
+          country_code: "US",
+          phone: "555-987-6543"
+        },
+        billing_address: {
+          first_name: "Kai",
+          last_name: "Nalu",
+          address1: "456 Beach Ave",
+          address2: "Unit 12",
+          city: "Surf City",
+          province: "California",
+          province_code: "CA",
+          zip: "90210",
+          country: "United States",
+          country_code: "US"
+        },
+        line_items: [
+          {
+            product_id: 8901234567890,
+            variant_id: 44100100000001,
+            title: "Performance Shortboard",
+            variant_title: "Midnight Black / 5'6\"",
+            sku: "SRB-PERF-001-56",
+            vendor: "Surf Right Boards",
+            quantity: 1,
+            price: "349.00",
+            original_price: "399.00",
+            line_price: "349.00",
+            discount_allocations: [{ amount: "50.00", discount_application_index: 0 }],
+            properties: [],
+            taxable: true,
+            requires_shipping: true,
+            product_type: "Shortboard",
+            handle: "performance-shortboard"
+          },
+          {
+            product_id: 8901234567891,
+            variant_id: 44100100000010,
+            title: "Surf Wax - Tropical",
+            variant_title: "Warm Water",
+            sku: "SRW-WAX-TROP-01",
+            vendor: "Surf Right",
+            quantity: 3,
+            price: "6.99",
+            original_price: "6.99",
+            line_price: "20.97",
+            discount_allocations: [],
+            properties: [],
+            taxable: true,
+            requires_shipping: true,
+            product_type: "Accessories",
+            handle: "surf-wax-tropical"
+          },
+          {
+            product_id: 8901234567892,
+            variant_id: 44100100000020,
+            title: "Board Leash - 6ft Comp",
+            variant_title: "Black",
+            sku: "SRB-LEASH-6C-BK",
+            vendor: "Surf Right",
+            quantity: 1,
+            price: "30.00",
+            original_price: "30.00",
+            line_price: "30.00",
+            discount_allocations: [],
+            properties: [],
+            taxable: true,
+            requires_shipping: true,
+            product_type: "Accessories",
+            handle: "board-leash-6ft-comp"
+          }
+        ],
+        gift_cards: [],
+        tax_lines: [
+          { title: "CA State Tax", price: "24.00", rate: 0.06 },
+          { title: "County Tax", price: "8.00", rate: 0.02 }
+        ],
+        shipping_rate: {
+          handle: "shopify-Free%20Shipping-0.00",
+          title: "Free Shipping",
+          price: "0.00"
+        },
+        payment_due: "424.97",
+        payment_method: "credit_card",
+        customer: {
+          id: 7100000000123,
+          email: "surfer@example.com",
+          first_name: "Kai",
+          last_name: "Nalu"
+        }
+      };
+
+      /* ShopifyAnalytics.meta */
+      window.ShopifyAnalytics = window.ShopifyAnalytics || {};
+      window.ShopifyAnalytics.meta = {
+        page: {
+          pageType: "thank_you",
+          resourceType: "checkout",
+          resourceId: 35012345678901
+        },
+        product: {
+          id: 8901234567890,
+          title: "Performance Shortboard",
+          vendor: "Surf Right Boards",
+          type: "Shortboard",
+          variants: [
+            {
+              id: 44100100000001,
+              title: "Midnight Black / 5'6\"",
+              price: "34900",
+              sku: "SRB-PERF-001-56",
+              available: true
+            },
+            {
+              id: 44100100000002,
+              title: "Midnight Black / 6'0\"",
+              price: "34900",
+              sku: "SRB-PERF-001-60",
+              available: true
+            },
+            {
+              id: 44100100000003,
+              title: "Midnight Black / 6'4\"",
+              price: "37900",
+              sku: "SRB-PERF-001-64",
+              available: true
+            },
+            {
+              id: 44100100000004,
+              title: "Midnight Black / 6'8\"",
+              price: "37900",
+              sku: "SRB-PERF-001-68",
+              available: false
+            }
+          ]
+        }
+      };
+
+      /* __st — Shopify customer tracking cookie context */
+      window.__st = {
+        cid: 7100000000123,
+        p: "thank_you",
+        rid: 35012345678901,
+        rtyp: "checkout",
+        sid: "s-" + Date.now()
+      };
+
+      console.log("[Shopify Test] window.Shopify set");
+      console.log("[Shopify Test] Shopify.checkout set (order_id:", window.Shopify.checkout.order_id, ")");
+      console.log("[Shopify Test] ShopifyAnalytics.meta set");
+
+      /* dataLayer purchase — +3s (simulating Shopify GTM pixel) */
+      setTimeout(function () {
+        window.dataLayer.push({ ecommerce: null });
+        window.dataLayer.push({
+          event: "purchase",
+          ecommerce: {
+            transaction_id: "6012345678901",
+            affiliation: "Surf Right Online Store",
+            value: 424.97,
+            tax: 32.00,
+            shipping: 0.00,
+            currency: "USD",
+            coupon: "SURFSEASON",
+            items: [
+              {
+                item_id: "SRB-PERF-001-56",
+                item_name: "Performance Shortboard",
+                item_brand: "Surf Right Boards",
+                item_category: "Shortboard",
+                item_variant: "Midnight Black / 5'6\"",
+                price: 349.00,
+                quantity: 1
+              },
+              {
+                item_id: "SRW-WAX-TROP-01",
+                item_name: "Surf Wax - Tropical",
+                item_brand: "Surf Right",
+                item_category: "Accessories",
+                item_variant: "Warm Water",
+                price: 6.99,
+                quantity: 3
+              },
+              {
+                item_id: "SRB-LEASH-6C-BK",
+                item_name: "Board Leash - 6ft Comp",
+                item_brand: "Surf Right",
+                item_category: "Accessories",
+                item_variant: "Black",
+                price: 30.00,
+                quantity: 1
+              }
+            ]
+          }
+        });
+        console.log("[Shopify Test] dataLayer purchase pushed at +3s");
+        var el = document.getElementById("status-dl-purchase");
+        if (el) { el.textContent = "\u2713 Fired"; el.classList.add("done"); }
+      }, 3000);
+    </script>
+
+    <!-- Interactive button handlers -->
+    <script>
+      function showStatus(msgId, btn) {
+        var msg = document.getElementById(msgId);
+        if (msg) { msg.classList.add("visible"); }
+        if (btn) { btn.classList.add("fired"); btn.textContent = "Set \u2713"; }
+      }
+
+      function fireCheckout(btn) {
+        window.Shopify = window.Shopify || {};
+        window.Shopify.checkout = {
+          order_id: 6012345678901,
+          order_name: "#SR-1042",
+          token: "abc123def456ghi789",
+          created_at: "2026-03-19T14:32:00-04:00",
+          currency: "USD",
+          total_price: "424.97",
+          subtotal_price: "399.97",
+          total_tax: "32.00",
+          total_shipping: "0.00",
+          total_discounts: "7.00",
+          financial_status: "paid",
+          discount_codes: [{ code: "SURFSEASON", amount: "7.00", type: "percentage" }],
+          line_items: [
+            { product_id: 8901234567890, variant_id: 44100100000001, title: "Performance Shortboard", variant_title: "Midnight Black / 5'6\"", sku: "SRB-PERF-001-56", vendor: "Surf Right Boards", quantity: 1, price: "349.00", line_price: "349.00", requires_shipping: true },
+            { product_id: 8901234567891, variant_id: 44100100000010, title: "Surf Wax - Tropical", variant_title: "Warm Water", sku: "SRW-WAX-TROP-01", vendor: "Surf Right", quantity: 3, price: "6.99", line_price: "20.97", requires_shipping: true },
+            { product_id: 8901234567892, variant_id: 44100100000020, title: "Board Leash - 6ft Comp", variant_title: "Black", sku: "SRB-LEASH-6C-BK", vendor: "Surf Right", quantity: 1, price: "30.00", line_price: "30.00", requires_shipping: true }
+          ],
+          customer: { id: 7100000000123, email: "surfer@example.com", first_name: "Kai", last_name: "Nalu" }
+        };
+        console.log("[Shopify Test] Shopify.checkout re-set via button");
+        showStatus("msg-checkout", btn);
+      }
+
+      function fireAnalyticsMeta(btn) {
+        window.ShopifyAnalytics = window.ShopifyAnalytics || {};
+        window.ShopifyAnalytics.meta = {
+          page: { pageType: "thank_you", resourceType: "checkout", resourceId: 35012345678901 },
+          product: {
+            id: 8901234567890,
+            title: "Performance Shortboard",
+            vendor: "Surf Right Boards",
+            type: "Shortboard",
+            variants: [
+              { id: 44100100000001, title: "Midnight Black / 5'6\"", price: "34900", sku: "SRB-PERF-001-56", available: true },
+              { id: 44100100000002, title: "Midnight Black / 6'0\"", price: "34900", sku: "SRB-PERF-001-60", available: true }
+            ]
+          }
+        };
+        console.log("[Shopify Test] ShopifyAnalytics.meta re-set via button");
+        showStatus("msg-meta", btn);
+      }
+
+      function fireCart(btn) {
+        window.__shopifyCart = {
+          token: "c1d2e3f4a5b6c7d8e9f0",
+          note: "Gift wrap please",
+          item_count: 5,
+          total_price: 39997,
+          total_weight: 4500,
+          currency: "USD",
+          items: [
+            { id: 44100100000001, product_id: 8901234567890, title: "Performance Shortboard", variant_title: "Midnight Black / 5'6\"", sku: "SRB-PERF-001-56", vendor: "Surf Right Boards", quantity: 1, price: 34900, line_price: 34900, handle: "performance-shortboard", product_type: "Shortboard" },
+            { id: 44100100000010, product_id: 8901234567891, title: "Surf Wax - Tropical", variant_title: "Warm Water", sku: "SRW-WAX-TROP-01", vendor: "Surf Right", quantity: 3, price: 699, line_price: 2097, handle: "surf-wax-tropical", product_type: "Accessories" },
+            { id: 44100100000020, product_id: 8901234567892, title: "Board Leash - 6ft Comp", variant_title: "Black", sku: "SRB-LEASH-6C-BK", vendor: "Surf Right", quantity: 1, price: 3000, line_price: 3000, handle: "board-leash-6ft-comp", product_type: "Accessories" }
+          ]
+        };
+        console.log("[Shopify Test] __shopifyCart set via button");
+        showStatus("msg-cart", btn);
+      }
+
+      function fireCustomer(btn) {
+        window.__st = window.__st || {};
+        window.__st.cid = 7100000000123;
+        window.Shopify = window.Shopify || {};
+        window.Shopify.checkout = window.Shopify.checkout || {};
+        window.Shopify.checkout.customer = {
+          id: 7100000000123,
+          email: "surfer@example.com",
+          first_name: "Kai",
+          last_name: "Nalu",
+          orders_count: 3,
+          total_spent: "1274.94",
+          tags: ["vip", "repeat-buyer"],
+          accepts_marketing: true,
+          default_address: {
+            first_name: "Kai",
+            last_name: "Nalu",
+            address1: "456 Beach Ave",
+            city: "Surf City",
+            province: "California",
+            province_code: "CA",
+            zip: "90210",
+            country: "United States",
+            country_code: "US"
+          }
+        };
+        console.log("[Shopify Test] Customer data set via button");
+        showStatus("msg-customer", btn);
+      }
+
+      function fireAddresses(btn) {
+        window.Shopify = window.Shopify || {};
+        window.Shopify.checkout = window.Shopify.checkout || {};
+        window.Shopify.checkout.shipping_address = {
+          first_name: "Kai", last_name: "Nalu",
+          address1: "456 Beach Ave", address2: "Unit 12",
+          city: "Surf City", province: "California", province_code: "CA",
+          zip: "90210", country: "United States", country_code: "US",
+          phone: "555-987-6543"
+        };
+        window.Shopify.checkout.billing_address = {
+          first_name: "Kai", last_name: "Nalu",
+          address1: "456 Beach Ave", address2: "Unit 12",
+          city: "Surf City", province: "California", province_code: "CA",
+          zip: "90210", country: "United States", country_code: "US"
+        };
+        console.log("[Shopify Test] Shipping & billing addresses set via button");
+        showStatus("msg-addr", btn);
+      }
+
+      function fireDLPurchase(btn) {
+        window.dataLayer.push({ ecommerce: null });
+        window.dataLayer.push({
+          event: "purchase",
+          ecommerce: {
+            transaction_id: "6012345678901",
+            affiliation: "Surf Right Online Store",
+            value: 424.97,
+            tax: 32.00,
+            shipping: 0.00,
+            currency: "USD",
+            coupon: "SURFSEASON",
+            items: [
+              { item_id: "SRB-PERF-001-56", item_name: "Performance Shortboard", item_brand: "Surf Right Boards", item_category: "Shortboard", item_variant: "Midnight Black / 5'6\"", price: 349.00, quantity: 1 },
+              { item_id: "SRW-WAX-TROP-01", item_name: "Surf Wax - Tropical", item_brand: "Surf Right", item_category: "Accessories", item_variant: "Warm Water", price: 6.99, quantity: 3 },
+              { item_id: "SRB-LEASH-6C-BK", item_name: "Board Leash - 6ft Comp", item_brand: "Surf Right", item_category: "Accessories", item_variant: "Black", price: 30.00, quantity: 1 }
+            ]
+          }
+        });
+        console.log("[Shopify Test] dataLayer purchase pushed via button");
+        btn.textContent = "Fired \u2713";
+        btn.classList.add("fired");
+        var msg = document.getElementById("msg-dl-purchase");
+        if (msg) { msg.classList.add("visible"); }
+      }
+    </script>
+
+    <script src="js/main.js"></script>
+  </body>
+</html>

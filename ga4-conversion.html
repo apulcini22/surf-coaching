@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="GA4 dataLayer conversion testing page - trigger and inspect GA4 conversion events for development and QA."
+    />
+    <meta
+      name="keywords"
+      content="GA4, conversion, dataLayer, testing, purchase, checkout, Google Analytics"
+    />
+    <title>GA4 Conversion Testing - Surf Right Coaching</title>
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .inner-page-hero {
+        height: 50vh;
+        min-height: 300px;
+      }
+
+      .conversion-section {
+        padding: 60px 0;
+      }
+
+      .conversion-section h2 {
+        text-align: center;
+        margin-bottom: 15px;
+      }
+
+      .section-subtitle {
+        text-align: center;
+        color: #777;
+        margin-bottom: 50px;
+        font-size: 1rem;
+      }
+
+      .event-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+        gap: 30px;
+      }
+
+      .event-card {
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 30px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      .event-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      }
+
+      .event-card h3 {
+        font-size: 1.2rem;
+        margin-bottom: 6px;
+      }
+
+      .event-badge {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 3px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        margin-bottom: 15px;
+      }
+
+      .badge-conversion {
+        background-color: #e74c3c;
+        color: #fff;
+      }
+
+      .badge-ecommerce {
+        background-color: #e67e22;
+        color: #fff;
+      }
+
+      .badge-engagement {
+        background-color: #3498db;
+        color: #fff;
+      }
+
+      .event-card p {
+        color: #555;
+        font-size: 0.92rem;
+        line-height: 1.6;
+        margin-bottom: 20px;
+      }
+
+      .event-card pre {
+        background: #f4f4f4;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 15px;
+        font-size: 0.78rem;
+        line-height: 1.5;
+        overflow-x: auto;
+        margin-bottom: 20px;
+        max-height: 260px;
+        overflow-y: auto;
+      }
+
+      .fire-btn {
+        display: inline-block;
+        background-color: #27ae60;
+        color: white;
+        padding: 10px 24px;
+        border: none;
+        border-radius: 5px;
+        text-transform: uppercase;
+        font-weight: 700;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        font-family: inherit;
+      }
+
+      .fire-btn:hover {
+        background-color: #219a52;
+      }
+
+      .fire-btn.fired {
+        background-color: #95a5a6;
+        cursor: default;
+      }
+
+      .status-msg {
+        display: inline-block;
+        margin-left: 12px;
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: #27ae60;
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+
+      .status-msg.visible {
+        opacity: 1;
+      }
+
+      .auto-fire-section {
+        background: #f9f9f9;
+        padding: 60px 0;
+      }
+
+      .auto-fire-section h2 {
+        text-align: center;
+        margin-bottom: 15px;
+      }
+
+      .auto-fire-info {
+        max-width: 800px;
+        margin: 0 auto 30px;
+        text-align: center;
+        color: #555;
+        line-height: 1.7;
+      }
+
+      .auto-events-list {
+        max-width: 800px;
+        margin: 0 auto;
+        display: grid;
+        gap: 15px;
+      }
+
+      .auto-event-row {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        background: #fff;
+        padding: 15px 20px;
+        border-radius: 6px;
+        border: 1px solid #e0e0e0;
+        font-size: 0.9rem;
+      }
+
+      .auto-event-row .event-name {
+        font-weight: 700;
+        color: #2c3e50;
+        min-width: 150px;
+      }
+
+      .auto-event-row .event-timing {
+        color: #e67e22;
+        font-weight: 600;
+        min-width: 100px;
+      }
+
+      .auto-event-row .event-status {
+        margin-left: auto;
+        font-weight: 600;
+        color: #95a5a6;
+      }
+
+      .auto-event-row .event-status.done {
+        color: #27ae60;
+      }
+
+      @media (max-width: 768px) {
+        .event-grid {
+          grid-template-columns: 1fr;
+          gap: 20px;
+        }
+        .auto-event-row {
+          flex-wrap: wrap;
+        }
+      }
+    </style>
+
+    <!-- Google Tag Manager / Google Analytics -->
+    <script>
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-NW293KQ');
+    </script>
+  </head>
+  <body>
+    <header class="hero inner-page-hero">
+      <nav class="navbar">
+        <div class="container">
+          <a href="index.html" class="logo">Surf Right</a>
+          <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="shopify.html">Shopify</a></li>
+            <li><a href="ga.html">GA</a></li>
+            <li><a href="ga4-conversion.html">GA4 Conversion</a></li>
+            <li><a href="shopify-conversion.html">Shopify Conversion</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+          </ul>
+        </div>
+      </nav>
+
+      <div class="hero-content">
+        <h1>GA4 Conversion Testing</h1>
+        <p class="hero-tagline">
+          Trigger and inspect GA4 dataLayer conversion events for development &amp; QA
+        </p>
+      </div>
+    </header>
+
+    <!-- On-Page-Load Conversion Events (auto-fired) -->
+    <section class="auto-fire-section">
+      <div class="container">
+        <h2>Auto-Fired Events (Page Load)</h2>
+        <p class="auto-fire-info">
+          These GA4 conversion events are pushed to <code>window.dataLayer</code> automatically
+          when the page loads or after a timed delay, simulating a real user journey.
+        </p>
+        <div class="auto-events-list">
+          <div class="auto-event-row">
+            <span class="event-name">page_view</span>
+            <span class="event-timing">Immediate</span>
+            <span class="event-desc">Standard page view with full page context</span>
+            <span class="event-status done" id="status-page-view">&#10003; Fired</span>
+          </div>
+          <div class="auto-event-row">
+            <span class="event-name">view_item</span>
+            <span class="event-timing">Immediate</span>
+            <span class="event-desc">Product view for Surf Coaching Package</span>
+            <span class="event-status done" id="status-view-item">&#10003; Fired</span>
+          </div>
+          <div class="auto-event-row">
+            <span class="event-name">view_item_list</span>
+            <span class="event-timing">+2 seconds</span>
+            <span class="event-desc">User scrolls and sees a product list</span>
+            <span class="event-status" id="status-view-item-list">Pending</span>
+          </div>
+
+          <div class="auto-event-row">
+            <span class="event-name">purchase</span>
+            <span class="event-timing">+8 seconds</span>
+            <span class="event-desc">Full e-commerce purchase with multi-item cart</span>
+            <span class="event-status" id="status-auto-purchase">Pending</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Button-Triggered Events -->
+    <section class="conversion-section">
+      <div class="container">
+        <h2>Interactive Conversion Events</h2>
+        <p class="section-subtitle">
+          Click each button to push the corresponding GA4 event to <code>window.dataLayer</code>.
+          Open your browser console or GTM Preview to inspect.
+        </p>
+
+        <div class="event-grid">
+
+          <!-- add_to_cart -->
+          <div class="event-card">
+            <span class="event-badge badge-ecommerce">Ecommerce</span>
+            <h3>add_to_cart</h3>
+            <p>User adds a surf coaching package to their cart.</p>
+            <pre>{
+  event: "add_to_cart",
+  ecommerce: {
+    currency: "USD",
+    value: 150.00,
+    items: [{
+      item_id: "COACH-ADV-001",
+      item_name: "Advanced Surf Coaching",
+      item_brand: "Surf Right",
+      item_category: "Coaching",
+      item_variant: "2-Hour Session",
+      price: 150.00,
+      quantity: 1
+    }]
+  }
+}</pre>
+            <button class="fire-btn" onclick="fireAddToCart(this)">Fire Event</button>
+            <span class="status-msg" id="msg-atc">Pushed to dataLayer</span>
+          </div>
+
+          <!-- purchase -->
+          <div class="event-card">
+            <span class="event-badge badge-conversion">Conversion</span>
+            <h3>purchase</h3>
+            <p>Completed e-commerce purchase with full transaction details.</p>
+            <pre>{
+  event: "purchase",
+  ecommerce: {
+    transaction_id: "SR-20260319-4821",
+    value: 324.99,
+    tax: 26.00,
+    shipping: 0.00,
+    currency: "USD",
+    coupon: "SURF2026",
+    items: [{
+      item_id: "COACH-ADV-001",
+      item_name: "Advanced Surf Coaching",
+      affiliation: "Surf Right Online",
+      coupon: "SURF2026",
+      discount: 15.00,
+      item_brand: "Surf Right",
+      item_category: "Coaching",
+      item_category2: "Advanced",
+      item_variant: "2-Hour Session",
+      price: 150.00,
+      quantity: 1
+    }, {
+      item_id: "BOARD-RENT-007",
+      item_name: "Premium Board Rental",
+      affiliation: "Surf Right Online",
+      item_brand: "Surf Right",
+      item_category: "Rentals",
+      item_category2: "Boards",
+      item_variant: "Full Day",
+      price: 75.00,
+      quantity: 2
+    }]
+  }
+}</pre>
+            <button class="fire-btn" onclick="firePurchase(this)">Fire Event</button>
+            <span class="status-msg" id="msg-purchase">Pushed to dataLayer</span>
+          </div>
+
+          <!-- refund -->
+          <div class="event-card">
+            <span class="event-badge badge-conversion">Conversion</span>
+            <h3>refund</h3>
+            <p>Full or partial refund issued for a prior transaction.</p>
+            <pre>{
+  event: "refund",
+  ecommerce: {
+    transaction_id: "SR-20260319-4821",
+    value: 75.00,
+    currency: "USD",
+    items: [{
+      item_id: "BOARD-RENT-007",
+      item_name: "Premium Board Rental",
+      item_brand: "Surf Right",
+      item_category: "Rentals",
+      price: 75.00,
+      quantity: 1
+    }]
+  }
+}</pre>
+            <button class="fire-btn" onclick="fireRefund(this)">Fire Event</button>
+            <span class="status-msg" id="msg-refund">Pushed to dataLayer</span>
+          </div>
+
+          <!-- generate_lead -->
+          <div class="event-card">
+            <span class="event-badge badge-conversion">Conversion</span>
+            <h3>generate_lead</h3>
+            <p>User submits a lead form (e.g. lesson inquiry).</p>
+            <pre>{
+  event: "generate_lead",
+  currency: "USD",
+  value: 75.00,
+  lead_source: "website_form",
+  form_id: "surf_lesson_inquiry",
+  form_name: "Book a Lesson"
+}</pre>
+            <button class="fire-btn" onclick="fireGenerateLead(this)">Fire Event</button>
+            <span class="status-msg" id="msg-lead">Pushed to dataLayer</span>
+          </div>
+
+          <!-- sign_up -->
+          <div class="event-card">
+            <span class="event-badge badge-engagement">Engagement</span>
+            <h3>sign_up</h3>
+            <p>User creates an account or signs up for a newsletter.</p>
+            <pre>{
+  event: "sign_up",
+  method: "email"
+}</pre>
+            <button class="fire-btn" onclick="fireSignUp(this)">Fire Event</button>
+            <span class="status-msg" id="msg-signup">Pushed to dataLayer</span>
+          </div>
+
+          <!-- login -->
+          <div class="event-card">
+            <span class="event-badge badge-engagement">Engagement</span>
+            <h3>login</h3>
+            <p>User logs in to their account.</p>
+            <pre>{
+  event: "login",
+  method: "Google"
+}</pre>
+            <button class="fire-btn" onclick="fireLogin(this)">Fire Event</button>
+            <span class="status-msg" id="msg-login">Pushed to dataLayer</span>
+          </div>
+
+          <!-- remove_from_cart -->
+          <div class="event-card">
+            <span class="event-badge badge-ecommerce">Ecommerce</span>
+            <h3>remove_from_cart</h3>
+            <p>User removes an item from the cart.</p>
+            <pre>{
+  event: "remove_from_cart",
+  ecommerce: {
+    currency: "USD",
+    value: 75.00,
+    items: [{
+      item_id: "BOARD-RENT-007",
+      item_name: "Premium Board Rental",
+      item_brand: "Surf Right",
+      item_category: "Rentals",
+      item_variant: "Full Day",
+      price: 75.00,
+      quantity: 1
+    }]
+  }
+}</pre>
+            <button class="fire-btn" onclick="fireRemoveFromCart(this)">Fire Event</button>
+            <span class="status-msg" id="msg-rfc">Pushed to dataLayer</span>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-logo">
+            <h3>Surf Right</h3>
+            <p>Professional surf instruction for all levels</p>
+          </div>
+          <div class="footer-links">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><a href="index.html">Home</a></li>
+              <li><a href="about.html">About</a></li>
+              <li><a href="shopify.html">Shopify</a></li>
+              <li><a href="ga.html">GA</a></li>
+              <li><a href="ga4-conversion.html">GA4 Conversion</a></li>
+              <li><a href="shopify-conversion.html">Shopify Conversion</a></li>
+              <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+          </div>
+          <div class="footer-contact">
+            <h4>Contact Info</h4>
+            <p>Email: info@surfrightcoaching.com</p>
+            <p>Phone: (555) 123-4567</p>
+            <p>Location: Beach Ave, Surf City</p>
+          </div>
+        </div>
+        <div class="copyright">
+          <p>&copy; 2025 Surf Right Coaching. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- GA4 dataLayer: auto-fired events on page load -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+
+      /* page_view — immediate */
+      window.dataLayer.push({
+        event: "page_view",
+        page_title: "GA4 Conversion Testing",
+        page_location: window.location.href,
+        page_path: "/ga4-conversion.html",
+        page_referrer: document.referrer
+      });
+
+      /* view_item — immediate */
+      window.dataLayer.push({ ecommerce: null });
+      window.dataLayer.push({
+        event: "view_item",
+        ecommerce: {
+          currency: "USD",
+          value: 150.00,
+          items: [
+            {
+              item_id: "COACH-ADV-001",
+              item_name: "Advanced Surf Coaching",
+              affiliation: "Surf Right Online",
+              coupon: "",
+              discount: 0,
+              index: 0,
+              item_brand: "Surf Right",
+              item_category: "Coaching",
+              item_category2: "Advanced",
+              item_category3: "Private",
+              item_list_id: "coaching_packages",
+              item_list_name: "Coaching Packages",
+              item_variant: "2-Hour Session",
+              price: 150.00,
+              quantity: 1
+            }
+          ]
+        }
+      });
+
+      /* view_item_list — +2s */
+      setTimeout(function () {
+        window.dataLayer.push({ ecommerce: null });
+        window.dataLayer.push({
+          event: "view_item_list",
+          ecommerce: {
+            item_list_id: "coaching_packages",
+            item_list_name: "Coaching Packages",
+            items: [
+              {
+                item_id: "COACH-BEG-001",
+                item_name: "Beginner Surf Lesson",
+                item_brand: "Surf Right",
+                item_category: "Coaching",
+                item_variant: "1-Hour Session",
+                price: 75.00,
+                index: 0,
+                quantity: 1
+              },
+              {
+                item_id: "COACH-INT-001",
+                item_name: "Intermediate Surf Coaching",
+                item_brand: "Surf Right",
+                item_category: "Coaching",
+                item_variant: "1.5-Hour Session",
+                price: 110.00,
+                index: 1,
+                quantity: 1
+              },
+              {
+                item_id: "COACH-ADV-001",
+                item_name: "Advanced Surf Coaching",
+                item_brand: "Surf Right",
+                item_category: "Coaching",
+                item_variant: "2-Hour Session",
+                price: 150.00,
+                index: 2,
+                quantity: 1
+              }
+            ]
+          }
+        });
+        console.log("[GA4 Test] view_item_list pushed at +2s");
+        var el = document.getElementById("status-view-item-list");
+        if (el) { el.textContent = "\u2713 Fired"; el.classList.add("done"); }
+      }, 2000);
+
+      /* purchase — +8s (full e-commerce conversion) */
+      setTimeout(function () {
+        window.dataLayer.push({ ecommerce: null });
+        window.dataLayer.push({
+          event: "purchase",
+          ecommerce: {
+            transaction_id: "SR-AUTO-" + Date.now(),
+            value: 385.00,
+            tax: 30.80,
+            shipping: 0.00,
+            currency: "USD",
+            coupon: "NEWBIE15",
+            items: [
+              {
+                item_id: "COACH-ADV-001",
+                item_name: "Advanced Surf Coaching",
+                affiliation: "Surf Right Online",
+                coupon: "NEWBIE15",
+                discount: 22.50,
+                index: 0,
+                item_brand: "Surf Right",
+                item_category: "Coaching",
+                item_category2: "Advanced",
+                item_variant: "2-Hour Session",
+                price: 150.00,
+                quantity: 1
+              },
+              {
+                item_id: "BOARD-RENT-007",
+                item_name: "Premium Board Rental",
+                affiliation: "Surf Right Online",
+                coupon: "",
+                discount: 0,
+                index: 1,
+                item_brand: "Surf Right",
+                item_category: "Rentals",
+                item_category2: "Boards",
+                item_variant: "Full Day",
+                price: 75.00,
+                quantity: 2
+              },
+              {
+                item_id: "WETSUIT-M-003",
+                item_name: "Wetsuit Rental - Medium",
+                affiliation: "Surf Right Online",
+                coupon: "",
+                discount: 0,
+                index: 2,
+                item_brand: "Surf Right",
+                item_category: "Rentals",
+                item_category2: "Wetsuits",
+                item_variant: "Medium / Full Day",
+                price: 35.00,
+                quantity: 1
+              }
+            ]
+          }
+        });
+        console.log("[GA4 Test] purchase pushed at +8s");
+        var el = document.getElementById("status-auto-purchase");
+        if (el) { el.textContent = "\u2713 Fired"; el.classList.add("done"); }
+      }, 8000);
+    </script>
+
+    <!-- GA4 dataLayer: interactive button handlers -->
+    <script>
+      function showStatus(msgId, btn) {
+        var msg = document.getElementById(msgId);
+        if (msg) { msg.classList.add("visible"); }
+        if (btn) { btn.classList.add("fired"); btn.textContent = "Fired \u2713"; }
+      }
+
+      function fireAddToCart(btn) {
+        window.dataLayer.push({ ecommerce: null });
+        window.dataLayer.push({
+          event: "add_to_cart",
+          ecommerce: {
+            currency: "USD",
+            value: 150.00,
+            items: [{
+              item_id: "COACH-ADV-001",
+              item_name: "Advanced Surf Coaching",
+              item_brand: "Surf Right",
+              item_category: "Coaching",
+              item_variant: "2-Hour Session",
+              price: 150.00,
+              quantity: 1
+            }]
+          }
+        });
+        console.log("[GA4 Test] add_to_cart pushed");
+        showStatus("msg-atc", btn);
+      }
+
+      function firePurchase(btn) {
+        window.dataLayer.push({ ecommerce: null });
+        window.dataLayer.push({
+          event: "purchase",
+          ecommerce: {
+            transaction_id: "SR-20260319-4821",
+            value: 324.99,
+            tax: 26.00,
+            shipping: 0.00,
+            currency: "USD",
+            coupon: "SURF2026",
+            items: [{
+              item_id: "COACH-ADV-001",
+              item_name: "Advanced Surf Coaching",
+              affiliation: "Surf Right Online",
+              coupon: "SURF2026",
+              discount: 15.00,
+              item_brand: "Surf Right",
+              item_category: "Coaching",
+              item_category2: "Advanced",
+              item_variant: "2-Hour Session",
+              price: 150.00,
+              quantity: 1
+            }, {
+              item_id: "BOARD-RENT-007",
+              item_name: "Premium Board Rental",
+              affiliation: "Surf Right Online",
+              item_brand: "Surf Right",
+              item_category: "Rentals",
+              item_category2: "Boards",
+              item_variant: "Full Day",
+              price: 75.00,
+              quantity: 2
+            }]
+          }
+        });
+        console.log("[GA4 Test] purchase pushed");
+        showStatus("msg-purchase", btn);
+      }
+
+      function fireRefund(btn) {
+        window.dataLayer.push({ ecommerce: null });
+        window.dataLayer.push({
+          event: "refund",
+          ecommerce: {
+            transaction_id: "SR-20260319-4821",
+            value: 75.00,
+            currency: "USD",
+            items: [{
+              item_id: "BOARD-RENT-007",
+              item_name: "Premium Board Rental",
+              item_brand: "Surf Right",
+              item_category: "Rentals",
+              price: 75.00,
+              quantity: 1
+            }]
+          }
+        });
+        console.log("[GA4 Test] refund pushed");
+        showStatus("msg-refund", btn);
+      }
+
+      function fireGenerateLead(btn) {
+        window.dataLayer.push({
+          event: "generate_lead",
+          currency: "USD",
+          value: 75.00,
+          lead_source: "website_form",
+          form_id: "surf_lesson_inquiry",
+          form_name: "Book a Lesson"
+        });
+        console.log("[GA4 Test] generate_lead pushed");
+        showStatus("msg-lead", btn);
+      }
+
+      function fireSignUp(btn) {
+        window.dataLayer.push({
+          event: "sign_up",
+          method: "email"
+        });
+        console.log("[GA4 Test] sign_up pushed");
+        showStatus("msg-signup", btn);
+      }
+
+      function fireLogin(btn) {
+        window.dataLayer.push({
+          event: "login",
+          method: "Google"
+        });
+        console.log("[GA4 Test] login pushed");
+        showStatus("msg-login", btn);
+      }
+
+      function fireRemoveFromCart(btn) {
+        window.dataLayer.push({ ecommerce: null });
+        window.dataLayer.push({
+          event: "remove_from_cart",
+          ecommerce: {
+            currency: "USD",
+            value: 75.00,
+            items: [{
+              item_id: "BOARD-RENT-007",
+              item_name: "Premium Board Rental",
+              item_brand: "Surf Right",
+              item_category: "Rentals",
+              item_variant: "Full Day",
+              price: 75.00,
+              quantity: 1
+            }]
+          }
+        });
+        console.log("[GA4 Test] remove_from_cart pushed");
+        showStatus("msg-rfc", btn);
+      }
+    </script>
+
+    <script src="js/main.js"></script>
+  </body>
+</html>

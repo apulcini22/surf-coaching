@@ -40,6 +40,8 @@
             <li><a href="about.html">About</a></li>
             <li><a href="shopify.html">Shopify</a></li>
             <li><a href="ga.html">Google Analytics</a></li>
+            <li><a href="ga4-conversion.html">GA4 Conversion</a></li>
+            <li><a href="shopify-conversion.html">Shopify Conversion</a></li>
             <li><a href="#services">Services</a></li>
             <li><a href="#contact">Contact</a></li>
           </ul>
@@ -51,6 +53,7 @@
         <p class="hero-tagline">
           Experience the thrill of surfing with personalized instruction
         </p>
+        <p class="hero-tagline"><b>No GA4 or shopify data. This is a regular page without those tags on it.</b></p>
         <div class="button-group">
           <a href="#contact" class="btn">Book Your First Lesson</a>
           <a href="about.html" target="_blank" class="btn btn-secondary"
@@ -135,6 +138,8 @@
               <li><a href="about.html" target="_blank">About</a></li>
               <li><a href="shopify.html">Shopify</a></li>
               <li><a href="ga.html">Google Analytics</a></li>
+              <li><a href="ga4-conversion.html">GA4 Conversion</a></li>
+              <li><a href="shopify-conversion.html">Shopify Conversion</a></li>
               <li><a href="#services">Services</a></li>
               <li><a href="#contact">Contact</a></li>
             </ul>
@@ -153,253 +158,5 @@
     </footer>
 
 
-
-    /* GTM Product data */
-    <script>
-      window.dataLayer = window.dataLayer || [];
-
-      /* View Item Event*/
-      window.dataLayer.push({
-        event: "view_item",
-        ecommerce: {
-          currency: "USD",
-          value: 59.99,
-          items: [
-            {
-              item_id: "SURF_BOARD_1987654567",
-              item_name: "Top Black Surf Board",
-              affiliation: "Online Store",
-              coupon: "SURF_RIGHT_COACHING",
-              discount: 0.00,
-              index: 0,
-              item_brand: "Surf Right",
-              item_category: "Surf Board",
-              item_category2: "Surf Board",
-              item_category3: "Surf Board",
-              item_list_id: "related_products",
-              item_list_name: "Related Products",
-              item_variant: "Black / Size 6'0",
-              price: 125.00,
-              quantity: 1
-            }
-          ]
-        }
-      });
-
-        // Always clear first
-      window.dataLayer.push({ ecommerce: null });
-
-      window.dataLayer.push({
-        event: "purchase",
-        ecommerce: {
-          transaction_id: "T_98765",
-          value: 139.97,
-          tax: 11.20,
-          shipping: 9.99,
-          currency: "USD",
-          coupon: "SUMMER20",
-          items: [
-            {
-              item_id: "SKU_12345",
-              item_name: "Classic White Sneakers",
-              affiliation: "Online Store",
-              coupon: "SUMMER20",
-              discount: 10.00,
-              index: 0,
-              item_brand: "Nike",
-              item_category: "Footwear",
-              item_category2: "Sneakers",
-              item_category3: "Mens",
-              item_list_id: "search_results",
-              item_list_name: "Search Results",
-              item_variant: "White / Size 10",
-              price: 59.99,
-              quantity: 1
-            },
-            {
-              item_id: "SKU_67890",
-              item_name: "Running Socks 3-Pack",
-              affiliation: "Online Store",
-              coupon: "",
-              discount: 0,
-              index: 1,
-              item_brand: "Adidas",
-              item_category: "Accessories",
-              item_category2: "Socks",
-              item_category3: "Unisex",
-              item_list_id: "recommended",
-              item_list_name: "Recommended For You",
-              item_variant: "Black / Large",
-              price: 14.99,
-              quantity: 2
-            },
-            {
-              item_id: "SKU_11223",
-              item_name: "Sports Water Bottle 1L",
-              affiliation: "Online Store",
-              coupon: "",
-              discount: 0,
-              index: 2,
-              item_brand: "Hydro Flask",
-              item_category: "Accessories",
-              item_category2: "Bottles",
-              item_category3: "Unisex",
-              item_list_id: "recommended",
-              item_list_name: "Recommended For You",
-              item_variant: "Blue / 1L",
-              price: 34.99,
-              quantity: 1
-            }
-          ]
-        }
-      });
-    </script>
-
-
-
-  /* SHOPIFY Product data */
-  <script>
-
-  window.ShopifyAnalytics = window.ShopifyAnalytics || {};
-  
-    window.ShopifyAnalytics.meta = {
-      page: {
-        pageType: "product",
-        resourceType: "product",
-        resourceId: 7890123456789
-      },
-      product: {
-        id: 7890123456789,
-        title: "Classic White Sneakers",
-        vendor: "Nike",
-        type: "Footwear",
-        variants: [
-          {
-            id: 43210987654321,
-            title: "White / Size 10",
-            price: "5999",        // in cents
-            sku: "SKU_12345",
-            available: true
-          },
-          {
-            id: 43210987654322,
-            title: "White / Size 11",
-            price: "5999",
-            sku: "SKU_12346",
-            available: false
-          }
-        ]
-      }
-    }
-  </script>
-
-  <script src="js/main.js"></script>
-
-
-
-  /* PUSHES ARGUMENTS ONTO THE DATA LAYER FOR GTM TO PICK UP */
-  <script>
-    function gtag() {
-      window.dataLayer.push(arguments);
-    }
-
-    // Now call it like normal — this creates a TRUE arguments object
-    gtag('event', 'purchase', {
-      transaction_id: 'argument_test',
-      value: 139.97,
-      currency: 'USD'
-    });
-    gtag('event', 'view_item', {
-      item_id: 'SKU-from dl-argument',
-      item_name: 'Product Name from dl-argument',
-      price: 99.99,
-      quantity: 1
-    }); 
-  </script>
-
-
-  /* DIRECT API CALLS TO SEND OVER EVENTS - USE IF NO PRODUCT DATA IS FOUNG FOR EXAMPLE */
-    <!-- <script>
-      // Page view
-      mtag('event', 'page_view', {
-        page_title: 'Home Page',
-        page_location: 'https://www.surfrightcoaching.com',
-        page_path: '/',
-        page_referrer: 'https://www.google.com',
-        page_viewport: '1920x1080',
-        items: [
-          {
-            item_id: 'SKU-api-call-direct-test',
-            item_name: 'API Call Direct Test',
-            price: 99.99,
-            quantity: 1
-          }
-        ]
-      });
-
-      // E-commerce purchase
-      mtag('event', 'purchase', {
-        transaction_id: 'T-12345',
-        currency: 'USD',
-        value: 99.99,
-        items: [
-          {
-            item_id: 'SKU-001',
-            item_name: 'Product Name',
-            price: 99.99,
-            quantity: 1
-          }
-        ]
-      });
-    </script> -->
-
-
-/* Push events onto the data layer after 5 seconds*/
-<script>
-  setTimeout(function() {
-    console.log('Pushing events onto the data layer after 5 seconds');
-    window.dataLayer.push({
-      event: 'purchase',
-      transaction_id: 'T-minus-5-seconds-12345',
-      currency: 'USD',
-      value: 99.99,
-    });
-    window.dataLayer.push({
-      event: 'view_item',
-      item_id: 'SKU-minus-5-seconds-001',
-      item_name: 'Product Name after 5 seconds',
-      price: 99.99,
-      quantity: 1
-    });
-  }, 5000);
-</script>
-
-    <!-- <script type="text/javascript">
-      (function() {
-        var s = document.createElement("script");
-        s.src = "https://cdn-staging.ex.mountain.com/mtag.js";
-        s.onload = function() {
-          mtag("config", "test-stream", {
-            apiUrl: "https://pxs-staging.ex.mountain.com",
-            debug: false,
-            autoDetectDataLayers: true
-          });
-        };
-        s.onerror = function(msg, url, lineNo, columnNo, error) {
-            return JSON.stringfify({msg,url,error});
-        };
-        document.head.appendChild(s);	
-      })();
-    </script> -->
-
-    <!-- /* MNTN TRACKING PIXEL 3.0.0 */
-  <script src="https://cdn-staging.ex.mountain.com/mtag.js?cb=356"></script>
-  <script>
-    mtag("config", "36214", {
-      apiUrl: "https://pxs-staging.ex.mountain.com",
-      debug: true,
-      autoDetectDataLayers: true
-    });
-  </script> -->
   </body>
 </html>
