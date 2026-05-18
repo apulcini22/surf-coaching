@@ -1,34 +1,35 @@
 /**
- * Google Consent Mode v2 + localStorage persistence (Surf Right test site)
+ * Google Consent Mode v2 — dataLayer shape matches Google’s basic consent guide:
+ * https://developers.google.com/tag-platform/security/guides/consent?consentmode=basic
  *
  * CMP_MODE: 'mock' | 'onetrust' | 'cookiebot'
  * Load synchronously in <head> BEFORE cmp-mock.js and GTM.
  *
+ * dataLayer consent entries (only these gtag consent pushes; no custom consent events):
+ *   ['consent', 'default', { ad_user_data, ad_personalization, ad_storage, analytics_storage, wait_for_update }]
+ *   ['consent', 'update',  { ad_user_data, ad_personalization, ad_storage, analytics_storage }]
+ *
+ * Console: dataLayer.filter(e => e && e[0] === 'consent')
+ *          localStorage.getItem('surf_consent')
+ *
  * --- GTM setup (manual) ---
- * 1. GTM Admin → Container settings → enable Advanced Consent Mode / consent overview.
+ * 1. GTM Admin → Container settings → enable consent overview / Advanced Consent Mode.
  * 2. GA4 tags: require analytics_storage.
  * 3. Ads / pixel tags: require ad_storage, ad_user_data, ad_personalization as needed.
- * 4. Optional trigger: Custom Event "cmp_consent_updated".
- *
- * --- Compliance test matrix (GTM Preview + Tag Assistant) ---
- * | Step | Action                         | Expected tag behavior                    |
- * |------|--------------------------------|------------------------------------------|
- * | 1    | First load, no CMP choice      | All storage denied; tags limited/blocked |
- * | 2    | Reject non-essential           | analytics + ad params denied             |
- * | 3    | Accept all                     | All four consent types granted           |
- * | 4    | Analytics on, Marketing off    | GA4 fires; ad/pixel blocked               |
- * | 5    | Marketing on, Analytics off    | Pixel/ads fire; GA4 blocked               |
- * | 6    | Navigate without clicking      | State restored from localStorage         |
- * | 7    | Dev Reset                      | Storage cleared; banner returns          |
- *
- * Console: dataLayer.filter(e => e[0] === 'consent')
- *          localStorage.getItem('surf_consent')
  */
 (function (window) {
   "use strict";
 
   var STORAGE_KEY = "surf_consent";
   var CMP_MODE = "mock";
+
+  var CONSENT_DEFAULT = {
+    ad_user_data: "denied",
+    ad_personalization: "denied",
+    ad_storage: "denied",
+    analytics_storage: "denied",
+    wait_for_update: 500,
+  };
 
   window.dataLayer = window.dataLayer || [];
   window.gtag =
@@ -37,12 +38,13 @@
       window.dataLayer.push(arguments);
     };
 
-  function toConsentParams(analytics, marketing) {
+  /** Key order matches Google’s consent v2 examples. */
+  function toConsentParams(analyticsGranted, marketingGranted) {
     return {
-      analytics_storage: analytics ? "granted" : "denied",
-      ad_storage: marketing ? "granted" : "denied",
-      ad_user_data: marketing ? "granted" : "denied",
-      ad_personalization: marketing ? "granted" : "denied",
+      ad_user_data: marketingGranted ? "granted" : "denied",
+      ad_personalization: marketingGranted ? "granted" : "denied",
+      ad_storage: marketingGranted ? "granted" : "denied",
+      analytics_storage: analyticsGranted ? "granted" : "denied",
     };
   }
 
@@ -64,14 +66,17 @@
     }
   }
 
-  function pushCmpEvent(consentParams, source) {
-    window.dataLayer.push({
-      event: "cmp_consent_updated",
-      cmp_source: CMP_MODE,
-      consent_analytics: consentParams.analytics_storage,
-      consent_marketing: consentParams.ad_storage,
-      consent_source: source || "unknown",
-    });
+  function storedToConsentParams(stored) {
+    if (stored.categories) {
+      return toConsentParams(stored.categories.analytics, stored.categories.marketing);
+    }
+    if (stored.consent) {
+      return toConsentParams(
+        stored.consent.analytics_storage === "granted",
+        stored.consent.ad_storage === "granted"
+      );
+    }
+    return toConsentParams(false, false);
   }
 
   function updateConsentUI() {
@@ -109,7 +114,6 @@
     };
 
     writeStored(payload);
-    pushCmpEvent(consentParams, source);
     updateConsentUI();
 
     window.dispatchEvent(
@@ -121,31 +125,27 @@
 
   function restoreConsentFromStorage() {
     var stored = readStored();
-    if (!stored || !stored.consent) return null;
-    window.gtag("consent", "update", stored.consent);
+    if (!stored) return null;
+    var consentParams = storedToConsentParams(stored);
+    window.gtag("consent", "update", consentParams);
     return stored;
   }
 
-  window.gtag("consent", "default", {
-    ad_storage: "denied",
-    ad_user_data: "denied",
-    ad_personalization: "denied",
-    analytics_storage: "denied",
-    wait_for_update: 500,
-  });
+  window.gtag("consent", "default", CONSENT_DEFAULT);
 
   restoreConsentFromStorage();
 
   window.SurfConsent = {
     STORAGE_KEY: STORAGE_KEY,
     CMP_MODE: CMP_MODE,
+    CONSENT_DEFAULT: CONSENT_DEFAULT,
 
     getConsentState: function () {
       var stored = readStored();
       if (stored) {
         return {
           categories: stored.categories,
-          consent: stored.consent,
+          consent: storedToConsentParams(stored),
           source: stored.source,
           updatedAt: stored.updatedAt,
           hasStoredChoice: true,
@@ -188,7 +188,6 @@
         /* ignore */
       }
       window.gtag("consent", "update", toConsentParams(false, false));
-      pushCmpEvent(toConsentParams(false, false), "reset");
       updateConsentUI();
       window.dispatchEvent(new CustomEvent("surf:consent-reset"));
     },
