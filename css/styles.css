@@ -326,4 +326,255 @@ footer {
     .footer-content {
         grid-template-columns: 1fr;
     }
-} 
+}
+
+/* Consent QA bar */
+.consent-qa-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10001;
+    background: #fffef5;
+    border-bottom: 2px dashed #e67e22;
+    padding: 8px 12px;
+    font-size: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.consent-qa-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+}
+
+.consent-qa-label {
+    font-weight: 700;
+    color: #e67e22;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.consent-qa-status {
+    flex: 1;
+    min-width: 200px;
+    color: #555;
+    font-family: monospace;
+    font-size: 0.7rem;
+}
+
+.consent-qa-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.consent-qa-btn {
+    padding: 6px 12px;
+    font-size: 0.65rem;
+}
+
+.consent-qa-btn-reset {
+    background-color: #95a5a6;
+}
+
+.consent-qa-btn-reset:hover {
+    background-color: #7f8c8d;
+}
+
+body.consent-qa-active {
+    padding-top: 52px;
+}
+
+/* Mock CMP banner */
+.cmp-hidden {
+    display: none !important;
+}
+
+.cmp-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 10000;
+    background: #2c3e50;
+    color: #fff;
+    padding: 20px 0;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.cmp-banner-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.cmp-banner-text h2 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: #fff;
+}
+
+.cmp-banner-text p {
+    font-size: 0.9rem;
+    margin: 0;
+    max-width: 600px;
+    opacity: 0.9;
+}
+
+.cmp-banner-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.cmp-btn-customize {
+    background-color: transparent;
+    border: 2px solid #fff;
+    color: #fff;
+}
+
+.cmp-btn-customize:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+body.cmp-banner-visible {
+    padding-bottom: 120px;
+}
+
+/* Mock CMP modal */
+.cmp-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10002;
+    background: rgba(0, 0, 0, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.cmp-modal {
+    background: #fff;
+    color: #333;
+    border-radius: 8px;
+    max-width: 480px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+}
+
+.cmp-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid #eee;
+}
+
+.cmp-modal-header h2 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.cmp-modal-close {
+    background: none;
+    border: none;
+    font-size: 1.75rem;
+    line-height: 1;
+    cursor: pointer;
+    color: #999;
+    padding: 0 4px;
+}
+
+.cmp-modal-close:hover {
+    color: #333;
+}
+
+.cmp-modal-body {
+    padding: 20px 24px;
+}
+
+.cmp-category {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 14px 0;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+}
+
+.cmp-category:last-child {
+    border-bottom: none;
+}
+
+.cmp-category input {
+    margin-top: 4px;
+    width: auto;
+}
+
+.cmp-category-disabled {
+    opacity: 0.7;
+    cursor: default;
+}
+
+.cmp-category span {
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.cmp-modal-footer {
+    padding: 16px 24px 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.cmp-modal-footer .btn {
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+    font-size: 0.75rem;
+    padding: 10px 16px;
+}
+
+.cmp-footer-link {
+    background: none;
+    border: none;
+    color: #3498db;
+    cursor: pointer;
+    font-size: 0.85rem;
+    text-decoration: underline;
+    margin-top: 8px;
+    font-family: inherit;
+}
+
+.cmp-footer-link:hover {
+    color: #5dade2;
+}
+
+body.cmp-modal-open {
+    overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    .consent-qa-inner {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .cmp-banner-inner {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .cmp-banner-actions {
+        justify-content: center;
+    }
+}
