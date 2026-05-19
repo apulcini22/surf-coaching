@@ -389,6 +389,63 @@ body.consent-qa-active {
     padding-top: 52px;
 }
 
+body.consent-granular-open {
+    padding-top: 140px;
+}
+
+.consent-granular-panel {
+    width: 100%;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed #ddd;
+}
+
+.consent-granular-hint {
+    margin: 0 0 8px;
+    font-size: 0.7rem;
+    color: #666;
+}
+
+.consent-granular-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 6px 16px;
+}
+
+.consent-granular-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.7rem;
+    cursor: pointer;
+}
+
+.consent-granular-item code {
+    font-size: 0.65rem;
+    color: #2c3e50;
+}
+
+.consent-granular-item input {
+    width: auto;
+    margin: 0;
+}
+
+.consent-qa-btn-toggle,
+.consent-qa-btn-apply {
+    background-color: #3498db;
+}
+
+.consent-qa-btn-toggle:hover,
+.consent-qa-btn-apply:hover {
+    background-color: #2980b9;
+}
+
+.cmp-modal-intro {
+    margin: 0 0 12px;
+    font-size: 0.85rem;
+    color: #666;
+}
+
 /* Mock CMP banner */
 .cmp-hidden {
     display: none !important;

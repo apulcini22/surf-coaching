@@ -9,38 +9,76 @@
   var modalEl = null;
   var overlayEl = null;
 
-  function getCategoriesFromModal() {
-    return {
-      analytics: document.getElementById("cmp-analytics").checked,
-      marketing: document.getElementById("cmp-marketing").checked,
-    };
+  function getSettingsFromModal() {
+    var settings = {};
+    window.SurfConsent.CONSENT_TYPES.forEach(function (key) {
+      var el = document.getElementById("cmp-" + key);
+      settings[key] = el ? el.checked : false;
+    });
+    return settings;
   }
 
   function syncModalFromState() {
     var state = window.SurfConsent.getConsentState();
-    var analyticsEl = document.getElementById("cmp-analytics");
-    var marketingEl = document.getElementById("cmp-marketing");
-    if (analyticsEl) analyticsEl.checked = !!state.categories.analytics;
-    if (marketingEl) marketingEl.checked = !!state.categories.marketing;
+    window.SurfConsent.CONSENT_TYPES.forEach(function (key) {
+      var el = document.getElementById("cmp-" + key);
+      if (el) el.checked = !!state.settings[key];
+    });
   }
 
   function saveFromModal(source) {
-    var categories = getCategoriesFromModal();
-    window.SurfConsent.applyConsent(categories, source || "cmp");
+    window.SurfConsent.applyGranularConsent(
+      getSettingsFromModal(),
+      source || "cmp"
+    );
     hideBanner();
     closeModal();
+    window.SurfConsent.syncGranularCheckboxes(
+      window.SurfConsent.getConsentState().settings
+    );
   }
 
   function acceptAll() {
     window.SurfConsent.grantAllConsent("cmp");
     hideBanner();
     closeModal();
+    syncModalFromState();
+    window.SurfConsent.syncGranularCheckboxes(
+      window.SurfConsent.getConsentState().settings
+    );
   }
 
   function rejectNonEssential() {
     window.SurfConsent.denyAllConsent("cmp");
     hideBanner();
     closeModal();
+    syncModalFromState();
+    window.SurfConsent.syncGranularCheckboxes(
+      window.SurfConsent.getConsentState().settings
+    );
+  }
+
+  function buildConsentTypeRows() {
+    var descriptions = {
+      analytics_storage: "GA4 and site analytics.",
+      ad_storage: "Ad cookies and conversion storage.",
+      ad_user_data: "Sending user data to Google for advertising.",
+      ad_personalization: "Personalized ads and remarketing.",
+    };
+
+    return window.SurfConsent.CONSENT_TYPES.map(function (key) {
+      return (
+        '<label class="cmp-category">' +
+        '<input type="checkbox" id="cmp-' +
+        key +
+        '" />' +
+        "<span><strong>" +
+        key +
+        "</strong><br />" +
+        descriptions[key] +
+        "</span></label>"
+      );
+    }).join("");
   }
 
   function buildBanner() {
@@ -56,7 +94,7 @@
       '<div class="cmp-banner-text">' +
       "<h2>We value your privacy</h2>" +
       "<p>We use cookies to analyze site traffic and personalize ads. " +
-      "You can accept all, reject non-essential cookies, or customize your choices.</p>" +
+      "You can accept all, reject non-essential cookies, or customize each consent type.</p>" +
       "</div>" +
       '<div class="cmp-banner-actions">' +
       '<button type="button" class="btn cmp-btn-accept" data-cmp="accept-all">Accept all</button>' +
@@ -95,18 +133,12 @@
       '<button type="button" class="cmp-modal-close" aria-label="Close">&times;</button>' +
       "</div>" +
       '<div class="cmp-modal-body">' +
+      '<p class="cmp-modal-intro">Set each Google Consent Mode v2 type individually for pixel testing.</p>' +
       '<label class="cmp-category cmp-category-disabled">' +
       '<input type="checkbox" checked disabled />' +
       "<span><strong>Strictly necessary</strong><br />Required for the site to function. Always on.</span>" +
       "</label>" +
-      '<label class="cmp-category">' +
-      '<input type="checkbox" id="cmp-analytics" />' +
-      "<span><strong>Analytics</strong><br />Helps us understand how visitors use the site (analytics_storage).</span>" +
-      "</label>" +
-      '<label class="cmp-category">' +
-      '<input type="checkbox" id="cmp-marketing" />' +
-      "<span><strong>Marketing</strong><br />Used for ads and remarketing (ad_storage, ad_user_data, ad_personalization).</span>" +
-      "</label>" +
+      buildConsentTypeRows() +
       "</div>" +
       '<div class="cmp-modal-footer">' +
       '<button type="button" class="btn cmp-btn-save" data-cmp-modal="save">Save preferences</button>' +
@@ -204,6 +236,10 @@
 
     window.addEventListener("surf:consent-reset", function () {
       showBanner();
+    });
+
+    window.addEventListener("surf:consent-updated", function () {
+      syncModalFromState();
     });
   }
 

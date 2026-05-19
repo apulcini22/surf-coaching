@@ -2,26 +2,25 @@
  * Google Consent Mode v2 — dataLayer shape matches Google’s basic consent guide:
  * https://developers.google.com/tag-platform/security/guides/consent?consentmode=basic
  *
- * CMP_MODE: 'mock' | 'onetrust' | 'cookiebot'
- * Load synchronously in <head> BEFORE cmp-mock.js and GTM.
- *
- * dataLayer consent entries (only these gtag consent pushes; no custom consent events):
+ * dataLayer consent entries:
  *   ['consent', 'default', { ad_user_data, ad_personalization, ad_storage, analytics_storage, wait_for_update }]
  *   ['consent', 'update',  { ad_user_data, ad_personalization, ad_storage, analytics_storage }]
  *
  * Console: dataLayer.filter(e => e && e[0] === 'consent')
  *          localStorage.getItem('surf_consent')
- *
- * --- GTM setup (manual) ---
- * 1. GTM Admin → Container settings → enable consent overview / Advanced Consent Mode.
- * 2. GA4 tags: require analytics_storage.
- * 3. Ads / pixel tags: require ad_storage, ad_user_data, ad_personalization as needed.
  */
 (function (window) {
   "use strict";
 
   var STORAGE_KEY = "surf_consent";
   var CMP_MODE = "mock";
+
+  var CONSENT_TYPES = [
+    "ad_user_data",
+    "ad_personalization",
+    "ad_storage",
+    "analytics_storage",
+  ];
 
   var CONSENT_DEFAULT = {
     ad_user_data: "denied",
@@ -38,14 +37,54 @@
       window.dataLayer.push(arguments);
     };
 
-  /** Key order matches Google’s consent v2 examples. */
-  function toConsentParams(analyticsGranted, marketingGranted) {
+  function toStatus(granted) {
+    return granted ? "granted" : "denied";
+  }
+
+  /** Google key order from booleans per type. */
+  function buildConsentParams(settings) {
     return {
-      ad_user_data: marketingGranted ? "granted" : "denied",
-      ad_personalization: marketingGranted ? "granted" : "denied",
-      ad_storage: marketingGranted ? "granted" : "denied",
-      analytics_storage: analyticsGranted ? "granted" : "denied",
+      ad_user_data: toStatus(!!settings.ad_user_data),
+      ad_personalization: toStatus(!!settings.ad_personalization),
+      ad_storage: toStatus(!!settings.ad_storage),
+      analytics_storage: toStatus(!!settings.analytics_storage),
     };
+  }
+
+  function consentParamsToSettings(consentParams) {
+    var settings = {};
+    CONSENT_TYPES.forEach(function (key) {
+      settings[key] = consentParams[key] === "granted";
+    });
+    return settings;
+  }
+
+  function allDeniedSettings() {
+    return {
+      ad_user_data: false,
+      ad_personalization: false,
+      ad_storage: false,
+      analytics_storage: false,
+    };
+  }
+
+  function allGrantedSettings() {
+    return {
+      ad_user_data: true,
+      ad_personalization: true,
+      ad_storage: true,
+      analytics_storage: true,
+    };
+  }
+
+  /** Category presets (banner quick actions). */
+  function toConsentParamsFromCategories(analyticsGranted, marketingGranted) {
+    return buildConsentParams({
+      analytics_storage: analyticsGranted,
+      ad_storage: marketingGranted,
+      ad_user_data: marketingGranted,
+      ad_personalization: marketingGranted,
+    });
   }
 
   function readStored() {
@@ -62,21 +101,26 @@
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
     } catch (e) {
-      /* ignore quota / private mode */
+      /* ignore */
     }
   }
 
   function storedToConsentParams(stored) {
-    if (stored.categories) {
-      return toConsentParams(stored.categories.analytics, stored.categories.marketing);
+    if (stored.consent && stored.consent.analytics_storage) {
+      return {
+        ad_user_data: stored.consent.ad_user_data,
+        ad_personalization: stored.consent.ad_personalization,
+        ad_storage: stored.consent.ad_storage,
+        analytics_storage: stored.consent.analytics_storage,
+      };
     }
-    if (stored.consent) {
-      return toConsentParams(
-        stored.consent.analytics_storage === "granted",
-        stored.consent.ad_storage === "granted"
+    if (stored.categories) {
+      return toConsentParamsFromCategories(
+        stored.categories.analytics,
+        stored.categories.marketing
       );
     }
-    return toConsentParams(false, false);
+    return buildConsentParams(allDeniedSettings());
   }
 
   function updateConsentUI() {
@@ -85,30 +129,43 @@
     var state = window.SurfConsent.getConsentState();
     var stored = readStored() ? "yes" : "no";
     statusEl.textContent =
-      "Analytics: " +
-      state.consent.analytics_storage +
-      " | Marketing: " +
+      "ad_user_data: " +
+      state.consent.ad_user_data +
+      " | ad_personalization: " +
+      state.consent.ad_personalization +
+      " | ad_storage: " +
       state.consent.ad_storage +
-      " | Source: " +
-      (state.source || "none") +
+      " | analytics_storage: " +
+      state.consent.analytics_storage +
       " | Stored: " +
       stored;
+
+    syncGranularCheckboxes(state.settings);
   }
 
-  function applyConsent(categories, source) {
-    var analytics = !!categories.analytics;
-    var marketing = !!categories.marketing;
-    var consentParams = toConsentParams(analytics, marketing);
+  function syncGranularCheckboxes(settings) {
+    CONSENT_TYPES.forEach(function (key) {
+      var el = document.getElementById("qa-" + key);
+      if (el) el.checked = !!settings[key];
+    });
+  }
 
+  function readGranularFromQA() {
+    var settings = {};
+    CONSENT_TYPES.forEach(function (key) {
+      var el = document.getElementById("qa-" + key);
+      settings[key] = el ? el.checked : false;
+    });
+    return settings;
+  }
+
+  function applyConsentParams(consentParams, source) {
     window.gtag("consent", "update", consentParams);
 
+    var settings = consentParamsToSettings(consentParams);
     var payload = {
-      categories: {
-        necessary: true,
-        analytics: analytics,
-        marketing: marketing,
-      },
       consent: consentParams,
+      settings: settings,
       updatedAt: new Date().toISOString(),
       source: source || "unknown",
     };
@@ -121,6 +178,14 @@
     );
 
     return payload;
+  }
+
+  function applyConsent(categories, source) {
+    var consentParams = toConsentParamsFromCategories(
+      !!categories.analytics,
+      !!categories.marketing
+    );
+    return applyConsentParams(consentParams, source);
   }
 
   function restoreConsentFromStorage() {
@@ -139,21 +204,23 @@
     STORAGE_KEY: STORAGE_KEY,
     CMP_MODE: CMP_MODE,
     CONSENT_DEFAULT: CONSENT_DEFAULT,
+    CONSENT_TYPES: CONSENT_TYPES,
 
     getConsentState: function () {
       var stored = readStored();
       if (stored) {
+        var consent = storedToConsentParams(stored);
         return {
-          categories: stored.categories,
-          consent: storedToConsentParams(stored),
+          consent: consent,
+          settings: stored.settings || consentParamsToSettings(consent),
           source: stored.source,
           updatedAt: stored.updatedAt,
           hasStoredChoice: true,
         };
       }
       return {
-        categories: { necessary: true, analytics: false, marketing: false },
-        consent: toConsentParams(false, false),
+        consent: buildConsentParams(allDeniedSettings()),
+        settings: allDeniedSettings(),
         source: null,
         updatedAt: null,
         hasStoredChoice: false,
@@ -161,22 +228,23 @@
     },
 
     applyConsent: function (categories, source) {
-      return applyConsent(
-        {
-          analytics: categories.analytics,
-          marketing: categories.marketing,
-        },
-        source
-      );
+      return applyConsent(categories, source);
+    },
+
+    applyGranularConsent: function (settings, source) {
+      return applyConsentParams(buildConsentParams(settings), source || "granular");
     },
 
     grantAllConsent: function (source) {
-      return applyConsent({ analytics: true, marketing: true }, source || "qa");
+      return applyConsentParams(
+        buildConsentParams(allGrantedSettings()),
+        source || "qa"
+      );
     },
 
     denyAllConsent: function (source) {
-      return applyConsent(
-        { analytics: false, marketing: false },
+      return applyConsentParams(
+        buildConsentParams(allDeniedSettings()),
         source || "qa"
       );
     },
@@ -187,7 +255,7 @@
       } catch (e) {
         /* ignore */
       }
-      window.gtag("consent", "update", toConsentParams(false, false));
+      window.gtag("consent", "update", buildConsentParams(allDeniedSettings()));
       updateConsentUI();
       window.dispatchEvent(new CustomEvent("surf:consent-reset"));
     },
@@ -195,10 +263,26 @@
     hasStoredChoice: function () {
       return !!readStored();
     },
+
+    syncGranularCheckboxes: syncGranularCheckboxes,
   };
 
   function injectQaBar() {
     if (document.getElementById("consent-qa-bar")) return;
+
+    var granularLabels = CONSENT_TYPES.map(function (key) {
+      return (
+        '<label class="consent-granular-item">' +
+        '<input type="checkbox" id="qa-' +
+        key +
+        '" data-consent-type="' +
+        key +
+        '" /> ' +
+        "<code>" +
+        key +
+        "</code></label>"
+      );
+    }).join("");
 
     var bar = document.createElement("div");
     bar.id = "consent-qa-bar";
@@ -213,7 +297,14 @@
       '<button type="button" class="btn consent-qa-btn" data-action="grant">Accept all</button>' +
       '<button type="button" class="btn btn-secondary consent-qa-btn" data-action="deny">Reject all</button>' +
       '<button type="button" class="btn consent-qa-btn consent-qa-btn-reset" data-action="reset">Reset</button>' +
-      "</div></div>";
+      '<button type="button" class="btn consent-qa-btn consent-qa-btn-toggle" data-action="toggle-granular">Per-type testing</button>' +
+      '<button type="button" class="btn consent-qa-btn consent-qa-btn-apply" data-action="apply-granular">Apply selection</button>' +
+      "</div>" +
+      '<div id="consent-granular-panel" class="consent-granular-panel cmp-hidden">' +
+      '<p class="consent-granular-hint">Toggle each Google consent type, then Apply selection.</p>' +
+      '<div class="consent-granular-grid">' +
+      granularLabels +
+      "</div></div></div>";
 
     bar.addEventListener("click", function (e) {
       var btn = e.target.closest("[data-action]");
@@ -235,6 +326,16 @@
         window.SurfConsent.resetConsent();
         if (window.SurfCmpMock) {
           window.SurfCmpMock.showBanner();
+          window.SurfCmpMock.closeModal();
+        }
+      } else if (action === "toggle-granular") {
+        var panel = document.getElementById("consent-granular-panel");
+        if (panel) panel.classList.toggle("cmp-hidden");
+        document.body.classList.toggle("consent-granular-open");
+      } else if (action === "apply-granular") {
+        window.SurfConsent.applyGranularConsent(readGranularFromQA(), "qa-granular");
+        if (window.SurfCmpMock) {
+          window.SurfCmpMock.hideBanner();
           window.SurfCmpMock.closeModal();
         }
       }
