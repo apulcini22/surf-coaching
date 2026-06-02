@@ -331,15 +331,15 @@ footer {
 /* Consent QA bar */
 .consent-qa-bar {
     position: fixed;
-    top: 0;
+    bottom: 0;
     left: 0;
     right: 0;
     z-index: 10001;
     background: #fffef5;
-    border-bottom: 2px dashed #e67e22;
+    border-top: 2px dashed #e67e22;
     padding: 8px 12px;
     font-size: 0.75rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .consent-qa-inner {
@@ -386,11 +386,11 @@ footer {
 }
 
 body.consent-qa-active {
-    padding-top: 52px;
+    padding-bottom: 52px;
 }
 
 body.consent-granular-open {
-    padding-top: 140px;
+    padding-bottom: 140px;
 }
 
 .consent-granular-panel {

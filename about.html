@@ -276,6 +276,15 @@
         </div>
       </div>
     </footer>
+<script>
+    window.dataLayer = window.dataLayer || [];
+
+window.dataLayer.push({ event: 'test_button_click', category: 'ui_interaction', label: 'hero_cta', value: 1 });
+window.dataLayer.push({ event: 'fake_purchase_complete', transaction_id: 'TXN-00042', revenue: 99.99, currency: 'USD' });
+window.dataLayer.push({ event: 'bogus_form_submit', form_id: 'contact_form', form_name: 'Contact Us', success: true });
+window.dataLayer.push({ event: 'dummy_page_view', page_path: '/fake/page', page_title: 'Test Page' });
+window.dataLayer.push({ event: 'mock_video_play', video_id: 'vid_123', video_title: 'Intro Video', duration: 142 });
+</script>
 
     <script src="js/main.js"></script>
   </body>
