@@ -311,21 +311,21 @@
             <h3>add_to_cart</h3>
             <p>User adds a surf coaching package to their cart.</p>
             <pre>{
-  event: "add_to_cart",
-  ecommerce: {
-    currency: "USD",
-    value: 150.00,
-    items: [{
-      item_id: "COACH-ADV-001",
-      item_name: "Advanced Surf Coaching",
-      item_brand: "Surf Right",
-      item_category: "Coaching",
-      item_variant: "2-Hour Session",
-      price: 150.00,
-      quantity: 1
-    }]
-  }
-}</pre>
+            event: "add_to_cart",
+            ecommerce: {
+              currency: "USD",
+              value: 150.00,
+              items: [{
+                item_id: "COACH-ADV-001",
+                item_name: "Advanced Surf Coaching",
+                item_brand: "Surf Right",
+                item_category: "Coaching",
+                item_variant: "2-Hour Session",
+                price: 150.00,
+                quantity: 1
+              }]
+            }
+          }</pre>
             <button class="fire-btn" onclick="fireAddToCart(this)">Fire Event</button>
             <span class="status-msg" id="msg-atc">Pushed to dataLayer</span>
           </div>
@@ -336,41 +336,38 @@
             <h3>purchase</h3>
             <p>Completed e-commerce purchase with full transaction details.</p>
             <pre>{
-  event: "purchase",
-  ecommerce: {
-    transaction_id: "SR-20260319-4821",
-    value: 324.99,
-    tax: 26.00,
-    shipping: 0.00,
-    currency: "USD",
-    coupon: "SURF2026",
-    items: [{
-      item_id: "COACH-ADV-001",
-      item_name: "Advanced Surf Coaching",
-      affiliation: "Surf Right Online",
-      coupon: "SURF2026",
-      discount: 15.00,
-      item_brand: "Surf Right",
-      item_category: "Coaching",
-      item_category2: "Advanced",
-      item_variant: "2-Hour Session",
-      price: 150.00,
-      quantity: 1
-    }, {
-      item_id: "BOARD-RENT-007",
-      item_name: "Premium Board Rental",
-      affiliation: "Surf Right Online",
-      item_brand: "Surf Right",
-      item_category: "Rentals",
-      item_category2: "Boards",
-      item_variant: "Full Day",
-      price: 75.00,
-      quantity: 2
-    }]
-  }
-}</pre>
+              event: "purchase",
+              ecommerce: {
+                transaction_id: "SR-20260319-4821",
+                value: 324.99,
+                tax: 26.00,
+                shipping: 0.00,
+                currency: "USD",
+                coupon: "SURF2026",
+              }
+            }</pre>
             <button class="fire-btn" onclick="firePurchase(this)">Fire Event</button>
             <span class="status-msg" id="msg-purchase">Pushed to dataLayer</span>
+          </div>
+
+          <!-- GTM push purchase -->
+          <div class="event-card">
+            <span class="event-badge badge-conversion">GTM Array Conversion</span>
+            <h3>GTM Array Purchase</h3>
+            <p>Completed e-commerce purchase with full transaction details.</p>
+            <pre>{
+              event: "purchase",
+              ecommerce: {
+                transaction_id: "SR-20260319-4821",
+                value: 324.99,
+                tax: 26.00,
+                shipping: 0.00,
+                currency: "USD",
+                coupon: "SURF2026",
+              }
+            }</pre>
+            <button class="fire-btn" onclick="GoogleTagManagerPushEvent(this)">Fire Event</button>
+            <span class="status-msg" id="msg-gtm-array">Pushed to dataLayer</span>
           </div>
 
           <!-- refund -->
@@ -379,21 +376,13 @@
             <h3>refund</h3>
             <p>Full or partial refund issued for a prior transaction.</p>
             <pre>{
-  event: "refund",
-  ecommerce: {
-    transaction_id: "SR-20260319-4821",
-    value: 75.00,
-    currency: "USD",
-    items: [{
-      item_id: "BOARD-RENT-007",
-      item_name: "Premium Board Rental",
-      item_brand: "Surf Right",
-      item_category: "Rentals",
-      price: 75.00,
-      quantity: 1
-    }]
-  }
-}</pre>
+              event: "refund",
+              ecommerce: {
+                transaction_id: "SR-20260319-4821",
+                value: 75.00,
+                currency: "USD",
+              }
+            }</pre>
             <button class="fire-btn" onclick="fireRefund(this)">Fire Event</button>
             <span class="status-msg" id="msg-refund">Pushed to dataLayer</span>
           </div>
@@ -404,13 +393,13 @@
             <h3>generate_lead</h3>
             <p>User submits a lead form (e.g. lesson inquiry).</p>
             <pre>{
-  event: "generate_lead",
-  currency: "USD",
-  value: 75.00,
-  lead_source: "website_form",
-  form_id: "surf_lesson_inquiry",
-  form_name: "Book a Lesson"
-}</pre>
+              event: "generate_lead",
+              currency: "USD",
+              value: 75.00,
+              lead_source: "website_form",
+              form_id: "surf_lesson_inquiry",
+              form_name: "Book a Lesson"
+            }</pre>
             <button class="fire-btn" onclick="fireGenerateLead(this)">Fire Event</button>
             <span class="status-msg" id="msg-lead">Pushed to dataLayer</span>
           </div>
@@ -421,9 +410,9 @@
             <h3>sign_up</h3>
             <p>User creates an account or signs up for a newsletter.</p>
             <pre>{
-  event: "sign_up",
-  method: "email"
-}</pre>
+              event: "sign_up",
+              method: "email"
+            }</pre>
             <button class="fire-btn" onclick="fireSignUp(this)">Fire Event</button>
             <span class="status-msg" id="msg-signup">Pushed to dataLayer</span>
           </div>
@@ -434,9 +423,9 @@
             <h3>login</h3>
             <p>User logs in to their account.</p>
             <pre>{
-  event: "login",
-  method: "Google"
-}</pre>
+              event: "login",
+              method: "Google"
+            }</pre>
             <button class="fire-btn" onclick="fireLogin(this)">Fire Event</button>
             <span class="status-msg" id="msg-login">Pushed to dataLayer</span>
           </div>
@@ -447,21 +436,21 @@
             <h3>remove_from_cart</h3>
             <p>User removes an item from the cart.</p>
             <pre>{
-  event: "remove_from_cart",
-  ecommerce: {
-    currency: "USD",
-    value: 75.00,
-    items: [{
-      item_id: "BOARD-RENT-007",
-      item_name: "Premium Board Rental",
-      item_brand: "Surf Right",
-      item_category: "Rentals",
-      item_variant: "Full Day",
-      price: 75.00,
-      quantity: 1
-    }]
-  }
-}</pre>
+              event: "remove_from_cart",
+              ecommerce: {
+                currency: "USD",
+                value: 75.00,
+                items: [{
+                  item_id: "BOARD-RENT-007",
+                  item_name: "Premium Board Rental",
+                  item_brand: "Surf Right",
+                  item_category: "Rentals",
+                  item_variant: "Full Day",
+                  price: 75.00,
+                  quantity: 1
+                }]
+              }
+            }</pre>
             <button class="fire-btn" onclick="fireRemoveFromCart(this)">Fire Event</button>
             <span class="status-msg" id="msg-rfc">Pushed to dataLayer</span>
           </div>
@@ -514,144 +503,157 @@
         page_referrer: document.referrer
       });
 
-      /* view_item — immediate */
-      window.dataLayer.push({ ecommerce: null });
+      /* Push purchase event - immediate */
       window.dataLayer.push({
-        event: "view_item",
-        ecommerce: {
-          currency: "USD",
-          value: 150.00,
-          items: [
-            {
-              item_id: "COACH-ADV-001",
-              item_name: "Advanced Surf Coaching",
-              affiliation: "Surf Right Online",
-              coupon: "",
-              discount: 0,
-              index: 0,
-              item_brand: "Surf Right",
-              item_category: "Coaching",
-              item_category2: "Advanced",
-              item_category3: "Private",
-              item_list_id: "coaching_packages",
-              item_list_name: "Coaching Packages",
-              item_variant: "2-Hour Session",
-              price: 150.00,
-              quantity: 1
-            }
-          ]
-        }
+        event: 'purchase',
+        transaction_id: 'T-12345',   // required
+        currency: 'USD',             // required
+        value: 99.99,                // required
+        coupon: 'SUMMER10',          // optional
+        shipping: 4.00,              // optional
+        tax: 6.80,                   // optional
+        affiliation: 'Online Store', // optional
+        items: [{ item_id: '...', item_name: '...', price: 99.99, quantity: 1 }]
       });
 
+      /* view_item — immediate */
+      //window.dataLayer.push({ ecommerce: null });
+      // window.dataLayer.push({
+      //   event: "view_item",
+      //   ecommerce: {
+      //     currency: "USD",
+      //     value: 150.00,
+      //     items: [
+      //       {
+      //         item_id: "COACH-ADV-001",
+      //         item_name: "Advanced Surf Coaching",
+      //         affiliation: "Surf Right Online",
+      //         coupon: "",
+      //         discount: 0,
+      //         index: 0,
+      //         item_brand: "Surf Right",
+      //         item_category: "Coaching",
+      //         item_category2: "Advanced",
+      //         item_category3: "Private",
+      //         item_list_id: "coaching_packages",
+      //         item_list_name: "Coaching Packages",
+      //         item_variant: "2-Hour Session",
+      //         price: 150.00,
+      //         quantity: 1
+      //       }
+      //     ]
+      //   }
+      // });
+
       /* view_item_list — +2s */
-      setTimeout(function () {
-        window.dataLayer.push({ ecommerce: null });
-        window.dataLayer.push({
-          event: "view_item_list",
-          ecommerce: {
-            item_list_id: "coaching_packages",
-            item_list_name: "Coaching Packages",
-            items: [
-              {
-                item_id: "COACH-BEG-001",
-                item_name: "Beginner Surf Lesson",
-                item_brand: "Surf Right",
-                item_category: "Coaching",
-                item_variant: "1-Hour Session",
-                price: 75.00,
-                index: 0,
-                quantity: 1
-              },
-              {
-                item_id: "COACH-INT-001",
-                item_name: "Intermediate Surf Coaching",
-                item_brand: "Surf Right",
-                item_category: "Coaching",
-                item_variant: "1.5-Hour Session",
-                price: 110.00,
-                index: 1,
-                quantity: 1
-              },
-              {
-                item_id: "COACH-ADV-001",
-                item_name: "Advanced Surf Coaching",
-                item_brand: "Surf Right",
-                item_category: "Coaching",
-                item_variant: "2-Hour Session",
-                price: 150.00,
-                index: 2,
-                quantity: 1
-              }
-            ]
-          }
-        });
-        console.log("[GA4 Test] view_item_list pushed at +2s");
-        var el = document.getElementById("status-view-item-list");
-        if (el) { el.textContent = "\u2713 Fired"; el.classList.add("done"); }
-      }, 2000);
+      // setTimeout(function () {
+      //   window.dataLayer.push({ ecommerce: null });
+      //   window.dataLayer.push({
+      //     event: "view_item_list",
+      //     ecommerce: {
+      //       item_list_id: "coaching_packages",
+      //       item_list_name: "Coaching Packages",
+      //       items: [
+      //         {
+      //           item_id: "COACH-BEG-001",
+      //           item_name: "Beginner Surf Lesson",
+      //           item_brand: "Surf Right",
+      //           item_category: "Coaching",
+      //           item_variant: "1-Hour Session",
+      //           price: 75.00,
+      //           index: 0,
+      //           quantity: 1
+      //         },
+      //         {
+      //           item_id: "COACH-INT-001",
+      //           item_name: "Intermediate Surf Coaching",
+      //           item_brand: "Surf Right",
+      //           item_category: "Coaching",
+      //           item_variant: "1.5-Hour Session",
+      //           price: 110.00,
+      //           index: 1,
+      //           quantity: 1
+      //         },
+      //         {
+      //           item_id: "COACH-ADV-001",
+      //           item_name: "Advanced Surf Coaching",
+      //           item_brand: "Surf Right",
+      //           item_category: "Coaching",
+      //           item_variant: "2-Hour Session",
+      //           price: 150.00,
+      //           index: 2,
+      //           quantity: 1
+      //         }
+      //       ]
+      //     }
+      //   });
+      //   console.log("[GA4 Test] view_item_list pushed at +2s");
+      //   var el = document.getElementById("status-view-item-list");
+      //   if (el) { el.textContent = "\u2713 Fired"; el.classList.add("done"); }
+      // }, 2000);
 
       /* purchase — +8s (full e-commerce conversion) */
-      setTimeout(function () {
-        window.dataLayer.push({ ecommerce: null });
-        window.dataLayer.push({
-          event: "purchase",
-          ecommerce: {
-            transaction_id: "SR-AUTO-" + Date.now(),
-            value: 385.00,
-            tax: 30.80,
-            shipping: 0.00,
-            currency: "USD",
-            coupon: "NEWBIE15",
-            items: [
-              {
-                item_id: "COACH-ADV-001",
-                item_name: "Advanced Surf Coaching",
-                affiliation: "Surf Right Online",
-                coupon: "NEWBIE15",
-                discount: 22.50,
-                index: 0,
-                item_brand: "Surf Right",
-                item_category: "Coaching",
-                item_category2: "Advanced",
-                item_variant: "2-Hour Session",
-                price: 150.00,
-                quantity: 1
-              },
-              {
-                item_id: "BOARD-RENT-007",
-                item_name: "Premium Board Rental",
-                affiliation: "Surf Right Online",
-                coupon: "",
-                discount: 0,
-                index: 1,
-                item_brand: "Surf Right",
-                item_category: "Rentals",
-                item_category2: "Boards",
-                item_variant: "Full Day",
-                price: 75.00,
-                quantity: 2
-              },
-              {
-                item_id: "WETSUIT-M-003",
-                item_name: "Wetsuit Rental - Medium",
-                affiliation: "Surf Right Online",
-                coupon: "",
-                discount: 0,
-                index: 2,
-                item_brand: "Surf Right",
-                item_category: "Rentals",
-                item_category2: "Wetsuits",
-                item_variant: "Medium / Full Day",
-                price: 35.00,
-                quantity: 1
-              }
-            ]
-          }
-        });
-        console.log("[GA4 Test] purchase pushed at +8s");
-        var el = document.getElementById("status-auto-purchase");
-        if (el) { el.textContent = "\u2713 Fired"; el.classList.add("done"); }
-      }, 8000);
+      // setTimeout(function () {
+      //   window.dataLayer.push({ ecommerce: null });
+      //   window.dataLayer.push({
+      //     event: "purchase",
+      //     ecommerce: {
+      //       transaction_id: "SR-AUTO-" + Date.now(),
+      //       value: 385.00,
+      //       tax: 30.80,
+      //       shipping: 0.00,
+      //       currency: "USD",
+      //       coupon: "NEWBIE15",
+      //       items: [
+      //         {
+      //           item_id: "COACH-ADV-001",
+      //           item_name: "Advanced Surf Coaching",
+      //           affiliation: "Surf Right Online",
+      //           coupon: "NEWBIE15",
+      //           discount: 22.50,
+      //           index: 0,
+      //           item_brand: "Surf Right",
+      //           item_category: "Coaching",
+      //           item_category2: "Advanced",
+      //           item_variant: "2-Hour Session",
+      //           price: 150.00,
+      //           quantity: 1
+      //         },
+      //         {
+      //           item_id: "BOARD-RENT-007",
+      //           item_name: "Premium Board Rental",
+      //           affiliation: "Surf Right Online",
+      //           coupon: "",
+      //           discount: 0,
+      //           index: 1,
+      //           item_brand: "Surf Right",
+      //           item_category: "Rentals",
+      //           item_category2: "Boards",
+      //           item_variant: "Full Day",
+      //           price: 75.00,
+      //           quantity: 2
+      //         },
+      //         {
+      //           item_id: "WETSUIT-M-003",
+      //           item_name: "Wetsuit Rental - Medium",
+      //           affiliation: "Surf Right Online",
+      //           coupon: "",
+      //           discount: 0,
+      //           index: 2,
+      //           item_brand: "Surf Right",
+      //           item_category: "Rentals",
+      //           item_category2: "Wetsuits",
+      //           item_variant: "Medium / Full Day",
+      //           price: 35.00,
+      //           quantity: 1
+      //         }
+      //       ]
+      //     }
+      //   });
+      //   console.log("[GA4 Test] purchase pushed at +8s");
+      //   var el = document.getElementById("status-auto-purchase");
+      //   if (el) { el.textContent = "\u2713 Fired"; el.classList.add("done"); }
+      // }, 8000);
     </script>
 
     <!-- GA4 dataLayer: interactive button handlers -->
@@ -663,7 +665,6 @@
       }
 
       function fireAddToCart(btn) {
-        window.dataLayer.push({ ecommerce: null });
         window.dataLayer.push({
           event: "add_to_cart",
           ecommerce: {
@@ -685,7 +686,6 @@
       }
 
       function firePurchase(btn) {
-        window.dataLayer.push({ ecommerce: null });
         window.dataLayer.push({
           event: "purchase",
           ecommerce: {
@@ -695,37 +695,42 @@
             shipping: 0.00,
             currency: "USD",
             coupon: "SURF2026",
-            items: [{
-              item_id: "COACH-ADV-001",
-              item_name: "Advanced Surf Coaching",
-              affiliation: "Surf Right Online",
-              coupon: "SURF2026",
-              discount: 15.00,
-              item_brand: "Surf Right",
-              item_category: "Coaching",
-              item_category2: "Advanced",
-              item_variant: "2-Hour Session",
-              price: 150.00,
-              quantity: 1
-            }, {
-              item_id: "BOARD-RENT-007",
-              item_name: "Premium Board Rental",
-              affiliation: "Surf Right Online",
-              item_brand: "Surf Right",
-              item_category: "Rentals",
-              item_category2: "Boards",
-              item_variant: "Full Day",
-              price: 75.00,
-              quantity: 2
-            }]
+            // items: [{
+            //   item_id: "COACH-ADV-001",
+            //   item_name: "Advanced Surf Coaching",
+            //   affiliation: "Surf Right Online",
+            //   coupon: "SURF2026",
+            //   discount: 15.00,
+            //   item_brand: "Surf Right",
+            //   item_category: "Coaching",
+            //   item_category2: "Advanced",
+            //   item_variant: "2-Hour Session",
+            //   price: 150.00,
+            //   quantity: 1
+            // }, {
+            //   item_id: "BOARD-RENT-007",
+            //   item_name: "Premium Board Rental",
+            //   affiliation: "Surf Right Online",
+            //   item_brand: "Surf Right",
+            //   item_category: "Rentals",
+            //   item_category2: "Boards",
+            //   item_variant: "Full Day",
+            //   price: 75.00,
+            //   quantity: 2
+            // }]
           }
         });
         console.log("[GA4 Test] purchase pushed");
         showStatus("msg-purchase", btn);
       }
 
+      function GoogleTagManagerPushEvent(btn) {
+        window.dataLayer.push(['event', 'purchase', { transaction_id: 'T-12345', currency: 'USD', value: 99.99 }]);
+        console.log("[GA4 Test] GTM Array pushed");
+        showStatus("msg-gtm-array", btn);
+      }
+
       function fireRefund(btn) {
-        window.dataLayer.push({ ecommerce: null });
         window.dataLayer.push({
           event: "refund",
           ecommerce: {
@@ -778,7 +783,6 @@
       }
 
       function fireRemoveFromCart(btn) {
-        window.dataLayer.push({ ecommerce: null });
         window.dataLayer.push({
           event: "remove_from_cart",
           ecommerce: {
