@@ -354,18 +354,13 @@
           <div class="event-card">
             <span class="event-badge badge-conversion">GTM Array Conversion</span>
             <h3>GTM Array Purchase</h3>
-            <p>Completed e-commerce purchase with full transaction details.</p>
-            <pre>{
-              event: "purchase",
-              ecommerce: {
-                transaction_id: "SR-20260319-4821",
-                value: 324.99,
-                tax: 26.00,
-                shipping: 0.00,
-                currency: "USD",
-                coupon: "SURF2026",
-              }
-            }</pre>
+            <p>Push purchase event to dataLayer using GTM Array syntax.</p>
+            <pre>[
+              'event', 'purchase', 
+              { transaction_id: 'T-12345', 
+              currency: 'USD', 
+              value: 99.99 }
+              ]</pre>
             <button class="fire-btn" onclick="GoogleTagManagerPushEvent(this)">Fire Event</button>
             <span class="status-msg" id="msg-gtm-array">Pushed to dataLayer</span>
           </div>
