@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="dataLayer event testing page - push QA events with large numbers of top-level custom properties for development and QA."
+    />
+    <meta
+      name="keywords"
+      content="dataLayer, GTM, custom properties, qa_test_event, testing, Google Tag Manager"
+    />
+    <title>dataLayer Events - Surf Right Coaching</title>
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .inner-page-hero {
+        height: 50vh;
+        min-height: 300px;
+      }
+
+      .conversion-section {
+        padding: 60px 0;
+      }
+
+      .conversion-section h2 {
+        text-align: center;
+        margin-bottom: 15px;
+      }
+
+      .section-subtitle {
+        text-align: center;
+        color: #777;
+        margin-bottom: 50px;
+        font-size: 1rem;
+      }
+
+      .event-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+        gap: 30px;
+      }
+
+      .event-card {
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 30px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      .event-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      }
+
+      .event-card h3 {
+        font-size: 1.2rem;
+        margin-bottom: 6px;
+      }
+
+      .event-badge {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 3px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        margin-bottom: 15px;
+      }
+
+      .badge-flat {
+        background-color: #8e44ad;
+        color: #fff;
+      }
+
+      .badge-nested {
+        background-color: #16a085;
+        color: #fff;
+      }
+
+      .badge-stress {
+        background-color: #e74c3c;
+        color: #fff;
+      }
+
+      .badge-custom {
+        background-color: #2980b9;
+        color: #fff;
+      }
+
+      .event-card p {
+        color: #555;
+        font-size: 0.92rem;
+        line-height: 1.6;
+        margin-bottom: 20px;
+      }
+
+      .event-card pre {
+        background: #f4f4f4;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 15px;
+        font-size: 0.78rem;
+        line-height: 1.5;
+        overflow-x: auto;
+        margin-bottom: 20px;
+        max-height: 260px;
+        overflow-y: auto;
+      }
+
+      .fire-btn {
+        display: inline-block;
+        background-color: #27ae60;
+        color: white;
+        padding: 10px 24px;
+        border: none;
+        border-radius: 5px;
+        text-transform: uppercase;
+        font-weight: 700;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        font-family: inherit;
+      }
+
+      .fire-btn:hover {
+        background-color: #219a52;
+      }
+
+      .fire-btn.fired {
+        background-color: #95a5a6;
+      }
+
+      .status-msg {
+        display: inline-block;
+        margin-left: 12px;
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: #27ae60;
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+
+      .status-msg.visible {
+        opacity: 1;
+      }
+
+      .card-controls {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 15px;
+      }
+
+      .card-controls label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #2c3e50;
+      }
+
+      .card-controls input {
+        width: 110px;
+        padding: 8px 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-family: inherit;
+        font-size: 0.9rem;
+      }
+
+      .inspector-section {
+        background: #f9f9f9;
+        padding: 60px 0;
+      }
+
+      .inspector-section h2 {
+        text-align: center;
+        margin-bottom: 15px;
+      }
+
+      .inspector-info {
+        max-width: 800px;
+        margin: 0 auto 30px;
+        text-align: center;
+        color: #555;
+        line-height: 1.7;
+      }
+
+      .inspector-toolbar {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        flex-wrap: wrap;
+        margin-bottom: 25px;
+      }
+
+      .inspector-toolbar .fire-btn {
+        background-color: #34495e;
+      }
+
+      .inspector-toolbar .fire-btn:hover {
+        background-color: #2c3e50;
+      }
+
+      .datalayer-count {
+        font-weight: 700;
+        color: #2c3e50;
+      }
+
+      #last-push {
+        background: #2c3e50;
+        color: #ecf0f1;
+        border-radius: 6px;
+        padding: 20px;
+        font-size: 0.8rem;
+        line-height: 1.5;
+        max-height: 420px;
+        overflow: auto;
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      @media (max-width: 768px) {
+        .event-grid {
+          grid-template-columns: 1fr;
+          gap: 20px;
+        }
+      }
+    </style>
+
+    <script src="js/consent.js"></script>
+    <script src="js/cmp-mock.js"></script>
+    <!-- Google Tag Manager / Google Analytics -->
+    <script>
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-NW293KQ');
+    </script>
+  </head>
+  <body>
+    <header class="hero inner-page-hero">
+      <nav class="navbar">
+        <div class="container">
+          <a href="index.html" class="logo">Surf Right</a>
+          <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="shopify.html">Shopify</a></li>
+            <li><a href="ga.html">GA</a></li>
+            <li><a href="ga4-conversion.html">GA4 Conversion</a></li>
+            <li><a href="dataLayerEvents.html">dataLayer Events</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+          </ul>
+        </div>
+      </nav>
+
+      <div class="hero-content">
+        <h1>dataLayer Events</h1>
+        <p class="hero-tagline">
+          Push QA events with large numbers of custom properties to
+          <code>window.dataLayer</code>
+        </p>
+      </div>
+    </header>
+
+    <!-- Interactive Button-Triggered Events -->
+    <section class="conversion-section">
+      <div class="container">
+        <h2>Custom Property Events</h2>
+        <p class="section-subtitle">
+          Click a button to push the corresponding event to <code>window.dataLayer</code>.
+          Open your browser console or GTM Preview to inspect the payload.
+        </p>
+
+        <div class="event-grid">
+
+          <!-- 50 top-level props -->
+          <div class="event-card">
+            <span class="event-badge badge-flat">Flat Properties</span>
+            <h3>qa_test_event &mdash; 50 properties</h3>
+            <p>
+              One event with 50 top-level properties named
+              <code>custom_prop_1</code> through <code>custom_prop_50</code>.
+            </p>
+            <pre>const customProps = {};
+for (let i = 1; i &lt;= 50; i++) {
+  customProps[`custom_prop_${i}`] = `value_${i}`;
+}
+
+window.dataLayer.push({
+  event: "qa_test_event",
+  ...customProps
+});</pre>
+            <button class="fire-btn" onclick="fireFlatEvent(this, 50, 'msg-flat-50')">Fire Event</button>
+            <span class="status-msg" id="msg-flat-50">Pushed to dataLayer</span>
+          </div>
+
+          <!-- 200 top-level props -->
+          <div class="event-card">
+            <span class="event-badge badge-stress">Stress Test</span>
+            <h3>qa_test_event &mdash; 200 properties</h3>
+            <p>
+              Large flat payload for checking parameter limits and truncation in
+              GTM and downstream tags.
+            </p>
+            <pre>{
+  event: "qa_test_event",
+  custom_prop_1: "value_1",
+  ...
+  custom_prop_200: "value_200"
+}</pre>
+            <button class="fire-btn" onclick="fireFlatEvent(this, 200, 'msg-flat-200')">Fire Event</button>
+            <span class="status-msg" id="msg-flat-200">Pushed to dataLayer</span>
+          </div>
+
+          <!-- Custom count -->
+          <div class="event-card">
+            <span class="event-badge badge-custom">Configurable</span>
+            <h3>qa_test_event &mdash; custom count</h3>
+            <p>
+              Choose how many top-level properties to generate, then push a
+              single event containing all of them.
+            </p>
+            <div class="card-controls">
+              <label for="custom-count">Property count</label>
+              <input type="number" id="custom-count" value="75" min="1" max="5000" />
+            </div>
+            <pre>const customProps = {};
+for (let i = 1; i &lt;= count; i++) {
+  customProps[`custom_prop_${i}`] = `value_${i}`;
+}
+
+window.dataLayer.push({
+  event: "qa_test_event",
+  ...customProps
+});</pre>
+            <button class="fire-btn" onclick="fireCustomCountEvent(this)">Fire Event</button>
+            <span class="status-msg" id="msg-custom-count">Pushed to dataLayer</span>
+          </div>
+
+          <!-- Nested props -->
+          <div class="event-card">
+            <span class="event-badge badge-nested">Nested Object</span>
+            <h3>qa_test_event_nested</h3>
+            <p>
+              Same 50 properties, but nested under a single
+              <code>custom_props</code> object instead of the top level.
+            </p>
+            <pre>window.dataLayer.push({
+  event: "qa_test_event_nested",
+  custom_props: {
+    custom_prop_1: "value_1",
+    ...
+    custom_prop_50: "value_50"
+  }
+});</pre>
+            <button class="fire-btn" onclick="fireNestedEvent(this)">Fire Event</button>
+            <span class="status-msg" id="msg-nested">Pushed to dataLayer</span>
+          </div>
+
+          <!-- Mixed value types -->
+          <div class="event-card">
+            <span class="event-badge badge-custom">Mixed Types</span>
+            <h3>qa_test_event_typed</h3>
+            <p>
+              50 properties cycling through string, number, boolean, null, array
+              and object values to test type handling.
+            </p>
+            <pre>{
+  event: "qa_test_event_typed",
+  custom_prop_1: "value_1",
+  custom_prop_2: 2,
+  custom_prop_3: true,
+  custom_prop_4: null,
+  custom_prop_5: ["value_5"],
+  custom_prop_6: { nested: "value_6" },
+  ...
+}</pre>
+            <button class="fire-btn" onclick="fireTypedEvent(this)">Fire Event</button>
+            <span class="status-msg" id="msg-typed">Pushed to dataLayer</span>
+          </div>
+
+          <!-- Burst -->
+          <div class="event-card">
+            <span class="event-badge badge-stress">Burst</span>
+            <h3>qa_test_event &mdash; burst</h3>
+            <p>
+              Push several events back to back, each with 50 properties plus a
+              <code>burst_index</code>, to test rapid successive pushes.
+            </p>
+            <div class="card-controls">
+              <label for="burst-count">Event count</label>
+              <input type="number" id="burst-count" value="10" min="1" max="500" />
+            </div>
+            <pre>for (let n = 1; n &lt;= count; n++) {
+  window.dataLayer.push({
+    event: "qa_test_event",
+    burst_index: n,
+    ...customProps
+  });
+}</pre>
+            <button class="fire-btn" onclick="fireBurstEvents(this)">Fire Events</button>
+            <span class="status-msg" id="msg-burst">Pushed to dataLayer</span>
+          </div>
+
+          <!-- Long values -->
+          <div class="event-card">
+            <span class="event-badge badge-stress">Long Values</span>
+            <h3>qa_test_event_long_values</h3>
+            <p>
+              50 properties whose values are 500 characters each, useful for
+              checking value length limits and truncation.
+            </p>
+            <pre>customProps[`custom_prop_${i}`] =
+  `value_${i}_` + "x".repeat(500);</pre>
+            <button class="fire-btn" onclick="fireLongValueEvent(this)">Fire Event</button>
+            <span class="status-msg" id="msg-long">Pushed to dataLayer</span>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- dataLayer inspector -->
+    <section class="inspector-section">
+      <div class="container">
+        <h2>dataLayer Inspector</h2>
+        <p class="inspector-info">
+          The most recent push is shown below. The dataLayer itself is never
+          cleared here, since GTM reads from the same array.
+        </p>
+        <div class="inspector-toolbar">
+          <span>
+            Entries in <code>window.dataLayer</code>:
+            <span class="datalayer-count" id="dl-count">0</span>
+          </span>
+          <button class="fire-btn" onclick="refreshInspector()">Refresh</button>
+          <button class="fire-btn" onclick="logDataLayer()">Log Full dataLayer</button>
+        </div>
+        <pre id="last-push">No events pushed yet.</pre>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-logo">
+            <h3>Surf Right</h3>
+            <p>Professional surf instruction for all levels</p>
+          </div>
+          <div class="footer-links">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><a href="index.html">Home</a></li>
+              <li><a href="about.html">About</a></li>
+              <li><a href="shopify.html">Shopify</a></li>
+              <li><a href="ga.html">GA</a></li>
+              <li><a href="ga4-conversion.html">GA4 Conversion</a></li>
+              <li><a href="dataLayerEvents.html">dataLayer Events</a></li>
+              <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+          </div>
+          <div class="footer-contact">
+            <h4>Contact Info</h4>
+            <p>Email: info@surfrightcoaching.com</p>
+            <p>Phone: (555) 123-4567</p>
+            <p>Location: Beach Ave, Surf City</p>
+          </div>
+        </div>
+        <div class="copyright">
+          <p>&copy; 2025 Surf Right Coaching. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      window.dataLayer = window.dataLayer || [];
+
+      function buildCustomProps(count) {
+        var customProps = {};
+        for (var i = 1; i <= count; i++) {
+          customProps["custom_prop_" + i] = "value_" + i;
+        }
+        return customProps;
+      }
+
+      function readCount(inputId, fallback) {
+        var input = document.getElementById(inputId);
+        var value = parseInt(input && input.value, 10);
+        return isNaN(value) || value < 1 ? fallback : value;
+      }
+
+      function showStatus(msgId, btn, label) {
+        var msg = document.getElementById(msgId);
+        if (msg) { msg.classList.add("visible"); }
+        if (btn) { btn.classList.add("fired"); btn.textContent = (label || "Fired") + " \u2713"; }
+      }
+
+      function renderLastPush(payload) {
+        var el = document.getElementById("last-push");
+        if (el) {
+          el.textContent = JSON.stringify(payload, function (key, value) {
+            return value === undefined ? "undefined" : value;
+          }, 2);
+        }
+        refreshInspector();
+      }
+
+      function refreshInspector() {
+        var el = document.getElementById("dl-count");
+        if (el) { el.textContent = window.dataLayer.length; }
+      }
+
+      function logDataLayer() {
+        console.log("[dataLayer Events] full dataLayer:", window.dataLayer);
+      }
+
+      function fireFlatEvent(btn, count, msgId) {
+        var payload = Object.assign({ event: "qa_test_event" }, buildCustomProps(count));
+        window.dataLayer.push(payload);
+        console.log(
+          "Pushed 1 event with " + count + " top-level properties:",
+          window.dataLayer[window.dataLayer.length - 1]
+        );
+        renderLastPush(payload);
+        showStatus(msgId, btn);
+      }
+
+      function fireCustomCountEvent(btn) {
+        fireFlatEvent(btn, readCount("custom-count", 50), "msg-custom-count");
+      }
+
+      function fireNestedEvent(btn) {
+        var payload = {
+          event: "qa_test_event_nested",
+          custom_props: buildCustomProps(50)
+        };
+        window.dataLayer.push(payload);
+        console.log(
+          "Pushed 1 event with 50 nested properties:",
+          window.dataLayer[window.dataLayer.length - 1]
+        );
+        renderLastPush(payload);
+        showStatus("msg-nested", btn);
+      }
+
+      function fireTypedEvent(btn) {
+        var payload = { event: "qa_test_event_typed" };
+        for (var i = 1; i <= 50; i++) {
+          var key = "custom_prop_" + i;
+          switch (i % 6) {
+            case 1: payload[key] = "value_" + i; break;
+            case 2: payload[key] = i; break;
+            case 3: payload[key] = i % 12 === 3; break;
+            case 4: payload[key] = null; break;
+            case 5: payload[key] = ["value_" + i, i]; break;
+            default: payload[key] = { nested: "value_" + i, index: i };
+          }
+        }
+        window.dataLayer.push(payload);
+        console.log(
+          "Pushed 1 event with 50 mixed-type properties:",
+          window.dataLayer[window.dataLayer.length - 1]
+        );
+        renderLastPush(payload);
+        showStatus("msg-typed", btn);
+      }
+
+      function fireBurstEvents(btn) {
+        var count = readCount("burst-count", 10);
+        var customProps = buildCustomProps(50);
+        var lastPayload;
+        for (var n = 1; n <= count; n++) {
+          lastPayload = Object.assign({ event: "qa_test_event", burst_index: n }, customProps);
+          window.dataLayer.push(lastPayload);
+        }
+        console.log(
+          "Pushed " + count + " events with 50 top-level properties each. Last event:",
+          window.dataLayer[window.dataLayer.length - 1]
+        );
+        renderLastPush(lastPayload);
+        showStatus("msg-burst", btn, "Fired " + count);
+      }
+
+      function fireLongValueEvent(btn) {
+        var payload = { event: "qa_test_event_long_values" };
+        var filler = new Array(501).join("x");
+        for (var i = 1; i <= 50; i++) {
+          payload["custom_prop_" + i] = "value_" + i + "_" + filler;
+        }
+        window.dataLayer.push(payload);
+        console.log(
+          "Pushed 1 event with 50 long-value properties:",
+          window.dataLayer[window.dataLayer.length - 1]
+        );
+        renderLastPush(payload);
+        showStatus("msg-long", btn);
+      }
+
+      refreshInspector();
+    </script>
+
+    <script src="js/main.js"></script>
+  </body>
+</html>
